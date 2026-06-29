@@ -213,13 +213,21 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     #toast { right: 10px; left: 10px; bottom: 10px; text-align: center; }
 }
 
-@media (max-width: 480px) {
-    .topic-grid { grid-template-columns: 1fr; }
-    .diff-row { flex-direction: column; }
-    .diff-chip { text-align: center; }
-    .quiz-topbar { flex-direction: column; align-items: flex-start; gap: 15px; }
-    .timer-widget { width: 100%; justify-content: center; }
-}
+/* ... (aapka purana lamba CSS code) ... */
+
+    /* Premium Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary2); }
+
+    /* 3D Hover Effect for Cards */
+    .stat-card:hover, .topic-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+        border-color: var(--primary2);
+    }
+
 </style>
 </head>
 <body>
