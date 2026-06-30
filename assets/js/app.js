@@ -1,6 +1,9 @@
+
 // --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
+        // Mock registration to show PWA capability in JS. 
+        // In real project, you must create sw.js file in root directory.
         navigator.serviceWorker.register('sw.js').then(reg => {
             console.log('Service Worker Registered!', reg);
         }).catch(err => {
@@ -46,22 +49,17 @@ function toggleSidebar() {
 }
 
 // --- NAVIGATION LOGIC ---
-let originalNavTo = function(screenId, navId) {
+function navTo(screenId, navId) {
     document.querySelectorAll('.app-wrap main .screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
     
     document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
     document.getElementById(navId).classList.add('active');
     
+    // Auto-close sidebar on mobile after clicking
     document.getElementById('mainSidebar').classList.remove('mobile-open');
-    clearInterval(timerInterval); 
-};
-
-function navTo(screenId, navId) {
-    originalNavTo(screenId, navId);
-    if(screenId === 'analyticsScreen') {
-        setTimeout(renderLiveChart, 100); 
-    }
+    
+    clearInterval(timerInterval); // Stop timer if navigating away
 }
 
 // --- AUTHENTICATION ---
@@ -91,7 +89,7 @@ function pickDiff(diff, el) {
     selectedDiff = diff;
 }
 
-// --- MOCK QUIZ ENGINE & TIMER (AI Typing Effect) ---
+// --- MOCK QUIZ ENGINE & TIMER ---
 let curQIndex = 0;
 let curScore = 0;
 let timerInterval;
@@ -127,12 +125,14 @@ function loadQuestion() {
     const qTextEl = document.getElementById('qText');
     const optsBox = document.getElementById('optsList');
     
+    // UI Reset before typing
     qTextEl.innerText = "";
     optsBox.innerHTML = '';
     
+    // --- AI TYPING EFFECT LOGIC ---
     let i = 0;
     const txt = qData.q;
-    const speed = 25; 
+    const speed = 25; // Speed of typing (in milliseconds)
     
     function typeWriter() {
         if (i < txt.length) {
@@ -140,6 +140,7 @@ function loadQuestion() {
             i++;
             setTimeout(typeWriter, speed);
         } else {
+            // Typing khatam hone ke baad options show karein
             qData.opts.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'opt-btn';
@@ -147,15 +148,16 @@ function loadQuestion() {
                 btn.onclick = () => handleAnswer(index, qData.ans, btn);
                 btn.onmouseenter = cursorHover;
                 btn.onmouseleave = cursorLeave;
+                // Add a small fade-in animation for options
                 btn.style.opacity = 0;
                 btn.style.animation = `fadeUp 0.3s ease forwards ${index * 0.1}s`;
                 optsBox.appendChild(btn);
             });
-            startTimer(); 
+            startTimer(); // Timer starts after options appear
         }
     }
     
-    typeWriter(); 
+    typeWriter(); // Trigger typing effect
 }
 
 function handleAnswer(selected, correct, btn) {
@@ -205,7 +207,7 @@ function updateTimerUI() {
     
     if(timeLeft > 20) timerBox.className = 'timer-widget safe';
     else if(timeLeft > 10) timerBox.className = 'timer-widget';
-    else timerBox.className = 'timer-widget'; 
+    else timerBox.className = 'timer-widget'; // red
 }
 
 function endQuiz() {
@@ -213,18 +215,20 @@ function endQuiz() {
     document.getElementById('rsScore').innerText = curScore;
     navTo('resultsScreen', 'nav-quiz');
 }
-
 // --- LIVE DATA ANALYTICS CHART ---
 let performanceChartInstance = null;
+
 function renderLiveChart() {
     const ctx = document.getElementById('performanceChart').getContext('2d');
     
+    // Agar chart pehle se bana hai, toh usko destroy karein taaki naya ban sake
     if (performanceChartInstance) {
         performanceChartInstance.destroy();
     }
 
+    // Glowing gradient effect create karna
     const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); 
+    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); // Purple glow
     gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
 
     performanceChartInstance = new Chart(ctx, {
@@ -233,26 +237,37 @@ function renderLiveChart() {
             labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
             datasets: [{
                 label: 'Quiz Accuracy (%)',
-                data: [65, 72, 68, 85, 82, 90, 87], 
-                borderColor: '#7c3aed', 
+                data: [65, 72, 68, 85, 82, 90, 87], // Yeh aapka data hai
+                borderColor: '#7c3aed', // Primary Purple
                 backgroundColor: gradient,
                 borderWidth: 3,
-                pointBackgroundColor: '#06b6d4', 
+                pointBackgroundColor: '#06b6d4', // Cyan accent
                 pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 5,
                 pointHoverRadius: 7,
                 fill: true,
-                tension: 0.4 
+                tension: 0.4 // Curve effect ke liye
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } } } },
+            plugins: {
+                legend: {
+                    labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } }
+                }
+            },
             scales: {
-                x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } },
-                y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } }, min: 0, max: 100 }
+                x: { 
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
+                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } 
+                },
+                y: { 
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
+                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } },
+                    min: 0, max: 100
+                }
             }
         }
     });
