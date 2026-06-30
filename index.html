@@ -552,7 +552,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
       <strong>Chandigarh University</strong> | BCA Major Project | <strong>ABHINAV KUMAR</strong> | UID: O23BCA110050
   </div>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 // --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
@@ -770,6 +770,74 @@ function endQuiz() {
     document.getElementById('rsScore').innerText = curScore;
     navTo('resultsScreen', 'nav-quiz');
 }
+// --- LIVE DATA ANALYTICS CHART ---
+let performanceChartInstance = null;
+
+function renderLiveChart() {
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    
+    // Agar chart pehle se bana hai, toh usko destroy karein taaki naya ban sake
+    if (performanceChartInstance) {
+        performanceChartInstance.destroy();
+    }
+
+    // Glowing gradient effect create karna
+    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); // Purple glow
+    gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
+
+    performanceChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Quiz Accuracy (%)',
+                data: [65, 72, 68, 85, 82, 90, 87], // Yeh aapka data hai
+                borderColor: '#7c3aed', // Primary Purple
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: '#06b6d4', // Cyan accent
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4 // Curve effect ke liye
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } }
+                }
+            },
+            scales: {
+                x: { 
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
+                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } 
+                },
+                y: { 
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
+                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } },
+                    min: 0, max: 100
+                }
+            }
+        }
+    });
+}
+
+// Chart tabhi load ho jab user Analytics tab par click kare
+const originalNavTo = navTo;
+navTo = function(screenId, navId) {
+    originalNavTo(screenId, navId);
+    if(screenId === 'analyticsScreen') {
+        setTimeout(renderLiveChart, 100); // Thoda delay taaki screen visible ho jaye
+    }
+};
 </script>
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
