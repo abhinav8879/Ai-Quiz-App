@@ -1,1 +1,26 @@
+/* CINEMATIC LOGIN SCREEN UPGRADE */
+.login-wrap { 
+    display: flex; align-items: center; justify-content: center; 
+    height: calc(100vh - 68px); padding: 20px; 
+    /* Adding an ultra-realistic 8K style tech background with deep color grading */
+    background: linear-gradient(rgba(15, 15, 26, 0.6), rgba(15, 15, 26, 0.95)), 
+                url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop') center/cover;
+    position: relative;
+}
 
+.login-box { 
+    max-width: 400px; width: 100%; text-align: center; 
+    /* Premium Glassmorphism & Bokeh feel */
+    background: rgba(30, 30, 45, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(124, 58, 237, 0.1);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.login-box:hover {
+    transform: translateY(-5px);
+    border-color: rgba(124, 58, 237, 0.4);
+}
