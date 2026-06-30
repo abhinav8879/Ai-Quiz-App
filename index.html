@@ -674,22 +674,42 @@ function loadQuestion() {
     document.getElementById('scoreDisplay').innerText = curScore;
     
     const qData = mockQs[curQIndex % mockQs.length];
-    document.getElementById('qText').innerText = qData.q;
-    
+    const qTextEl = document.getElementById('qText');
     const optsBox = document.getElementById('optsList');
+    
+    // UI Reset before typing
+    qTextEl.innerText = "";
     optsBox.innerHTML = '';
     
-    qData.opts.forEach((opt, index) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.innerHTML = `<span class="opt-letter">${String.fromCharCode(65 + index)}</span> ${opt}`;
-        btn.onclick = () => handleAnswer(index, qData.ans, btn);
-        btn.onmouseenter = cursorHover;
-        btn.onmouseleave = cursorLeave;
-        optsBox.appendChild(btn);
-    });
-
-    startTimer();
+    // --- AI TYPING EFFECT LOGIC ---
+    let i = 0;
+    const txt = qData.q;
+    const speed = 25; // Speed of typing (in milliseconds)
+    
+    function typeWriter() {
+        if (i < txt.length) {
+            qTextEl.innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        } else {
+            // Typing khatam hone ke baad options show karein
+            qData.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerHTML = `<span class="opt-letter">${String.fromCharCode(65 + index)}</span> ${opt}`;
+                btn.onclick = () => handleAnswer(index, qData.ans, btn);
+                btn.onmouseenter = cursorHover;
+                btn.onmouseleave = cursorLeave;
+                // Add a small fade-in animation for options
+                btn.style.opacity = 0;
+                btn.style.animation = `fadeUp 0.3s ease forwards ${index * 0.1}s`;
+                optsBox.appendChild(btn);
+            });
+            startTimer(); // Timer starts after options appear
+        }
+    }
+    
+    typeWriter(); // Trigger typing effect
 }
 
 function handleAnswer(selected, correct, btn) {
