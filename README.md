@@ -23,3 +23,6 @@ An advanced, interactive AI-driven learning platform designed to test knowledge 
 1. Clone this repository:
    ```bash
    git clone [https://github.com/abhinav8879/Ai-Quiz-App.git](https://github.com/abhinav8879/Ai-Quiz-App.git)
+
+### 📊 GitHub Stats
+![Abhinav's GitHub stats](https://github-readme-stats.vercel.app/api?username=abhinav8879&show_icons=true&theme=radical)
