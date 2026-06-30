@@ -5,7 +5,7 @@
   
   **A Next-Generation Gamified Educational Dashboard built for the Modern Student.**
   
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-06b6d4?style=for-the-badge&logo=github)](<YOUR-GITHUB-PAGES-LINK>)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-06b6d4?style=for-the-badge&logo=github)](<https://abhinav8879.github.io/Ai-Quiz-App/>)
   [![License: MIT](https://img.shields.io/badge/License-MIT-7c3aed?style=for-the-badge)](https://opensource.org/licenses/MIT)
   
   <p align="center">
