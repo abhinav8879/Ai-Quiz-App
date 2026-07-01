@@ -660,16 +660,11 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+<script>
 // --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // Mock registration to show PWA capability in JS. 
-        // In real project, you must create sw.js file in root directory.
-        navigator.serviceWorker.register('sw.js').then(reg => {
-            console.log('Service Worker Registered!', reg);
-        }).catch(err => {
-            console.log('Service Worker registration failed: ', err);
-        });
+        navigator.serviceWorker.register('sw.js').catch(err => {});
     });
 }
 
@@ -677,17 +672,20 @@ if ('serviceWorker' in navigator) {
 const dot = document.getElementById("cursorDot");
 const outline = document.getElementById("cursorOutline");
 window.addEventListener("mousemove", function(e) {
-    dot.style.left = e.clientX + "px";
-    dot.style.top = e.clientY + "px";
-    outline.style.left = e.clientX + "px";
-    outline.style.top = e.clientY + "px";
+    if(dot && outline) {
+        dot.style.left = e.clientX + "px";
+        dot.style.top = e.clientY + "px";
+        outline.style.left = e.clientX + "px";
+        outline.style.top = e.clientY + "px";
+    }
 });
-function cursorHover() { outline.style.transform = "translate(-50%, -50%) scale(1.5)"; outline.style.backgroundColor = "rgba(124,58,237,0.1)"; }
-function cursorLeave() { outline.style.transform = "translate(-50%, -50%) scale(1)"; outline.style.backgroundColor = "transparent"; }
+function cursorHover() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1.5)"; outline.style.backgroundColor = "rgba(124,58,237,0.1)"; } }
+function cursorLeave() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1)"; outline.style.backgroundColor = "transparent"; } }
 
 // --- TOAST NOTIFICATIONS ---
 function showToast(msg) {
     const t = document.getElementById('toast');
+    if(!t) return;
     document.getElementById('toastMsg').innerText = msg;
     t.style.display = 'block';
     setTimeout(() => { t.style.display = 'none'; }, 3000);
@@ -705,8 +703,7 @@ function toggleFullscreen() {
 
 // --- MOBILE SIDEBAR TOGGLE ---
 function toggleSidebar() {
-    const sidebar = document.getElementById('mainSidebar');
-    sidebar.classList.toggle('mobile-open');
+    document.getElementById('mainSidebar').classList.toggle('mobile-open');
 }
 
 // --- NAVIGATION LOGIC ---
@@ -715,12 +712,12 @@ function navTo(screenId, navId) {
     document.getElementById(screenId).classList.add('active');
     
     document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
-    document.getElementById(navId).classList.add('active');
+    if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
     
-    // Auto-close sidebar on mobile after clicking
     document.getElementById('mainSidebar').classList.remove('mobile-open');
+    clearInterval(timerInterval);
     
-    clearInterval(timerInterval); // Stop timer if navigating away
+    if(screenId === 'analyticsScreen') setTimeout(renderLiveChart, 100);
 }
 
 // --- AUTHENTICATION ---
@@ -756,9 +753,8 @@ let curScore = 0;
 let timerInterval;
 let timeLeft = 60;
 const totalQs = 5;
-let currentLevel = 'medium'; // Quiz humesha Medium se start hoga
+let currentLevel = 'medium'; 
 
-// Adaptive Question Bank (Easy, Medium, Hard)
 const adaptiveQs = {
     easy: [
         { q: "Which language is used for styling web pages?", opts: ["HTML", "JQuery", "CSS", "XML"], ans: 2 },
@@ -778,7 +774,7 @@ function startQuiz() {
     const inputTopic = document.getElementById('customTopic').value.trim();
     if(inputTopic) selectedTopic = inputTopic;
     
-    curQIndex = 0; curScore = 0; currentLevel = 'medium'; // Reset level
+    curQIndex = 0; curScore = 0; currentLevel = 'medium'; 
     document.getElementById('topicCrumb').innerText = selectedTopic;
     navTo('quizScreen', 'nav-quiz');
     loadQuestion();
@@ -788,11 +784,9 @@ function loadQuestion() {
     if(curQIndex >= totalQs) { endQuiz(); return; }
     
     document.getElementById('qIndexDisplay').innerText = curQIndex + 1;
-    // UI mein Question ke upar level bhi dikhayega (e.g. Question 1 - MEDIUM LEVEL)
     document.getElementById('qTagDisplay').innerText = (curQIndex + 1) + " (" + currentLevel.toUpperCase() + " LEVEL)";
     document.getElementById('scoreDisplay').innerText = curScore;
     
-    // Level ke hisaab se question uthana
     const qList = adaptiveQs[currentLevel];
     const qData = qList[curQIndex % qList.length]; 
     
@@ -834,7 +828,6 @@ function handleAnswer(selected, correct, btn) {
     const buttons = document.querySelectorAll('.opt-btn');
     buttons.forEach(b => b.disabled = true);
     
-    // Sound Effects
     const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
     const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
     successSound.volume = 0.5; errorSound.volume = 0.4;
@@ -842,55 +835,26 @@ function handleAnswer(selected, correct, btn) {
     if(selected === correct) {
         btn.classList.add('correct');
         curScore++;
-        successSound.play();
-        
-        // ADAPTIVE LOGIC: Sahi jawab par difficulty badhayenge
+        successSound.play().catch(e=>console.log(e));
         if(currentLevel === 'easy') currentLevel = 'medium';
         else if(currentLevel === 'medium') currentLevel = 'hard';
         showToast("Correct! Difficulty Increased 📈");
-        
     } else {
         btn.classList.add('wrong');
         buttons[correct].classList.add('correct');
-        errorSound.play();
-        
-        // ADAPTIVE LOGIC: Galat jawab par difficulty ghatayenge
+        errorSound.play().catch(e=>console.log(e));
         if(currentLevel === 'hard') currentLevel = 'medium';
         else if(currentLevel === 'medium') currentLevel = 'easy';
         showToast("Incorrect! Difficulty Decreased 📉");
     }
     
     document.getElementById('scoreDisplay').innerText = curScore;
-    setTimeout(() => { curQIndex++; loadQuestion(); }, 1500); // Thoda zyada time diya taaki user dekh sake
+    setTimeout(() => { curQIndex++; loadQuestion(); }, 1500); 
 }
-    clearInterval(timerInterval);
-    const buttons = document.querySelectorAll('.opt-btn');
-    buttons.forEach(b => b.disabled = true);
-    
-    // Online free sound effect links
-    const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
-    const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
-    
-    // Sound ka volume thoda set karna (0.5 means 50%)
-    successSound.volume = 0.5;
-    errorSound.volume = 0.4;
-    
-    if(selected === correct) {
-        btn.classList.add('correct');
-        curScore++;
-        successSound.play(); // Sahi jawab par Success Ping bajega
-    } else {
-        btn.classList.add('wrong');
-        buttons[correct].classList.add('correct');
-        errorSound.play(); // Galat jawab par Error Buzz bajega
-    }
-    
-    document.getElementById('scoreDisplay').innerText = curScore;
-    setTimeout(() => { curQIndex++; loadQuestion(); }, 1200);
-}
+
 function skipQuestion() {
     clearInterval(timerInterval);
-    showToast("Question skipped. Negative marking applied (-1 XP)");
+    showToast("Question skipped. (-1 XP)");
     curQIndex++;
     loadQuestion();
 }
@@ -915,10 +879,8 @@ function updateTimerUI() {
     let m = Math.floor(timeLeft / 60);
     let s = timeLeft % 60;
     document.getElementById('timeText').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-    
     if(timeLeft > 20) timerBox.className = 'timer-widget safe';
-    else if(timeLeft > 10) timerBox.className = 'timer-widget';
-    else timerBox.className = 'timer-widget'; // red
+    else timerBox.className = 'timer-widget'; 
 }
 
 function endQuiz() {
@@ -926,92 +888,21 @@ function endQuiz() {
     document.getElementById('rsScore').innerText = curScore;
     navTo('resultsScreen', 'nav-quiz');
 }
-// --- LIVE DATA ANALYTICS CHART ---
-let performanceChartInstance = null;
 
-function renderLiveChart() {
-    const ctx = document.getElementById('performanceChart').getContext('2d');
-    
-    // Agar chart pehle se bana hai, toh usko destroy karein taaki naya ban sake
-    if (performanceChartInstance) {
-        performanceChartInstance.destroy();
-    }
-
-    // Glowing gradient effect create karna
-    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); // Purple glow
-    gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
-
-    performanceChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: 'Quiz Accuracy (%)',
-                data: [65, 72, 68, 85, 82, 90, 87], // Yeh aapka data hai
-                borderColor: '#7c3aed', // Primary Purple
-                backgroundColor: gradient,
-                borderWidth: 3,
-                pointBackgroundColor: '#06b6d4', // Cyan accent
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                fill: true,
-                tension: 0.4 // Curve effect ke liye
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } }
-                }
-            },
-            scales: {
-                x: { 
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
-                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } 
-                },
-                y: { 
-                    grid: { color: 'rgba(255, 255, 255, 0.05)' }, 
-                    ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } },
-                    min: 0, max: 100
-                }
-            }
-        }
-    });
-}
-
-// Chart tabhi load ho jab user Analytics tab par click kare
-const originalNavTo = navTo;
-navTo = function(screenId, navId) {
-    originalNavTo(screenId, navId);
-    if(screenId === 'analyticsScreen') {
-        setTimeout(renderLiveChart, 100); // Thoda delay taaki screen visible ho jaye
-    }
-};
-  // --- EXPORT STUDENT DATA TO CSV ---
+// --- EXPORT STUDENT DATA TO CSV ---
 function exportDataToCSV() {
     showToast('Preparing CSV Export...');
-    
-    // Yeh woh dummy data hai jo download hoga (Future mein API se aayega)
     const exportData = [
         ["Student Name", "UID", "Quiz Topic", "Score (XP)", "Accuracy", "Weakness"],
         ["Aarav Mishra", "O23BCA110012", "Java Core OOPS", "5200", "92%", "None"],
         ["Priya Singh", "O23BCA110088", "Data Structures", "4850", "88%", "Graphs"],
         ["Abhinav Kumar", "O23BCA110050", "Cloud Computing", "2450", "87%", "Database Normalization"]
     ];
-
-    // Array ko CSV string mein convert karna
     let csvContent = "data:text/csv;charset=utf-8,";
     exportData.forEach(function(rowArray) {
         let row = rowArray.join(",");
         csvContent += row + "\r\n";
     });
-
-    // File download karwana
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -1019,10 +910,47 @@ function exportDataToCSV() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
     setTimeout(() => { showToast('Export Successful!'); }, 1000);
 }
-  
+
+// --- LIVE DATA ANALYTICS CHART ---
+let performanceChartInstance = null;
+function renderLiveChart() {
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    if (performanceChartInstance) { performanceChartInstance.destroy(); }
+    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); 
+    gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
+    performanceChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Quiz Accuracy (%)',
+                data: [65, 72, 68, 85, 82, 90, 87], 
+                borderColor: '#7c3aed', 
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: '#06b6d4', 
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4 
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } } } },
+            scales: {
+                x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } },
+                y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } }, min: 0, max: 100 }
+            }
+        }
+    });
+}
 </script>
 
 </body>
