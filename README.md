@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/abhinav8879/Ai-Quiz-App/main/logo.png" alt="Logo" width="150" />
+  <img src="[https://raw.githubusercontent.com/abhinav8879/Ai-Quiz-App/main/logo.png](https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/logo.png?raw=true)" alt="Logo" width="150" />
   
   # 🧠 QuizAI - Advanced Learning Platform
   
