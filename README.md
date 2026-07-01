@@ -53,15 +53,8 @@ To run this project locally, simply follow these steps:
    ```bash
    git clone [https://github.com/abhinav8879/Ai-Quiz-App.git](https://github.com/abhinav8879/Ai-Quiz-App.git)
 
-Navigate to the project directory:
-
-Bash
-cd Ai-Quiz-App
-Run the Application:
-No complex backend setup is required for the frontend UI. Simply double-click on index.html to open it in any modern web browser (Chrome, Edge, Firefox).
-
-🔮 Future Scope (Data Architecture)
-In future phases, the data generated from the CSV Exports via the Teacher Panel will be integrated into a highly scalable backend data pipeline. The plan incorporates using Python, the Pandas library, and Apache Spark to run predictive modeling and deep learning algorithms on the structured student data, allowing for precise weakness detection and personalized AI study plan generation at an enterprise scale.
+## 🔮 Future Scope (Data Architecture)
+In future phases, the data generated from the **CSV Exports** via the Teacher Panel will be integrated into a highly scalable backend data pipeline. The plan incorporates using **Python, the Pandas library, and Apache Spark** to run predictive modeling and deep learning algorithms on the structured student data, allowing for precise weakness detection and personalized AI study plan generation at an enterprise scale.
 
    ## 👨‍💻 Developer
 **ABHINAV KUMAR** *BCA Major Project (Session 2023–2026)* **Chandigarh University** UID: O23BCA110050
