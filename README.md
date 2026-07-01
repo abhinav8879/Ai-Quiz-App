@@ -250,3 +250,321 @@ Install the **Live Server** extension in VS Code and click **Go Live**.
 * Clean User Experience
 
 ---
+
+# 🔄 Application Workflow
+
+```text
+                START
+                  │
+                  ▼
+          User Login / Sign In
+                  │
+                  ▼
+        Student Dashboard Opens
+                  │
+                  ▼
+            Select a Quiz Topic
+                  │
+                  ▼
+          Start Quiz & Timer Begins
+                  │
+                  ▼
+         Answer Multiple Questions
+                  │
+                  ▼
+      Evaluate Answers & Calculate Score
+                  │
+                  ▼
+      Adaptive Difficulty (Concept Layer)
+                  │
+                  ▼
+       Generate Result & Performance
+                  │
+                  ▼
+      Update Dashboard & Leaderboard
+                  │
+                  ▼
+                 END
+```
+
+---
+
+# 🏗️ System Architecture
+
+```text
+                  User
+                    │
+                    ▼
+          Responsive Web Interface
+                    │
+                    ▼
+           Quiz Management Module
+                    │
+     ┌──────────────┼──────────────┐
+     ▼              ▼              ▼
+ Authentication   Quiz Engine   Teacher Panel
+     │              │              │
+     └──────────────┼──────────────┘
+                    ▼
+          Analytics & Reports
+                    │
+                    ▼
+              Result Dashboard
+```
+
+---
+
+# 🤖 Adaptive Difficulty Concept
+
+The application demonstrates the concept of adaptive learning by adjusting the perceived difficulty level according to user performance.
+
+### Example Logic
+
+| Student Performance | Difficulty Level |
+| ------------------- | ---------------- |
+| 0–40%               | Easy             |
+| 41–70%              | Medium           |
+| 71–100%             | Hard             |
+
+> **Note:** In the current version, this represents the adaptive learning concept. Future versions can integrate AI/ML models to make difficulty adjustment fully dynamic.
+
+---
+
+# 📊 Analytics Dashboard
+
+The dashboard provides a quick overview of student performance through interactive charts and statistics.
+
+### Analytics Include
+
+* Overall Quiz Score
+* Accuracy Percentage
+* Correct vs Incorrect Answers
+* Quiz Attempts
+* Progress Overview
+* Leaderboard Position
+* Performance Trends
+
+---
+
+# 📁 Project Modules
+
+## 👨‍🎓 Student Module
+
+* User Login
+* Dashboard
+* Start Quiz
+* Submit Answers
+* View Result
+* Performance Analysis
+
+---
+
+## 👨‍🏫 Teacher Module
+
+* Teacher Dashboard
+* Manage Students
+* Manage Quizzes
+* Export Reports
+* Monitor Performance
+
+---
+
+## 📊 Analytics Module
+
+* Charts & Graphs
+* Progress Reports
+* Accuracy Tracking
+* Quiz Statistics
+
+---
+
+# 🎯 Future Scope
+
+The project can be extended with several advanced features:
+
+* 🔐 Secure Authentication using Spring Boot
+* 🗄️ MySQL Database Integration
+* 🤖 AI & Machine Learning Recommendation Engine
+* ☁️ Cloud Deployment
+* 📱 Android Application
+* 🔔 Email & Push Notifications
+* 🎤 Voice-Based Quiz
+* 🌍 Multi-language Support
+* 🏆 Global Leaderboard
+* 📜 Certificate Generation
+* 💬 AI Chatbot for Learning Assistance
+* 🧠 Personalized Study Plans
+
+---
+
+# 🔒 Security Features
+
+* Client-side Input Validation
+* Secure Navigation Flow
+* Responsive UI Design
+* Clean Code Structure
+* Modular JavaScript Files
+* Organized Assets Directory
+
+---
+
+# 📈 Project Highlights
+
+* Modern Educational Dashboard
+* Professional User Interface
+* Responsive Design
+* Interactive Quiz Experience
+* Gamification Elements
+* Real-time Analytics
+* Easy to Customize
+* Beginner Friendly Code Structure
+* GitHub Pages Deployment
+* Well-Organized Project Architecture
+
+---
+
+# 📜 License
+
+This project is licensed under the **MIT License**.
+
+You are free to use, modify, and distribute this project in accordance with the terms of the MIT License.
+
+---
+
+# 🤝 Contributing
+
+Contributions, suggestions, and improvements are welcome.
+
+If you'd like to contribute:
+
+1. Fork this repository.
+2. Create a new branch.
+3. Commit your changes.
+4. Push the branch.
+5. Open a Pull Request.
+
+---
+
+# 👨‍💻 Developer
+
+<div align="center">
+
+## **Abhinav Kumar**
+
+**BCA Major Project (Session 2023–2026)**
+**Chandigarh University**
+
+**Project Title:**
+**AI-Based Online Quiz Application with Adaptive Difficulty Level**
+
+</div>
+
+---
+
+# 📬 Connect With Me
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-abhinav8879-181717?style=for-the-badge\&logo=github)](https://github.com/abhinav8879)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Abhinav%20Kumar-0A66C2?style=for-the-badge\&logo=linkedin)](https://www.linkedin.com/in/abhinav-kumar-ba9604299)
+
+[![Live Demo](https://img.shields.io/badge/Live%20Website-Open%20Project-06B6D4?style=for-the-badge\&logo=googlechrome)](https://abhinav8879.github.io/Ai-Quiz-App/)
+
+</div>
+
+---
+
+# 📊 Repository Information
+
+| Property     | Details                          |
+| ------------ | -------------------------------- |
+| Project Name | AI-Based Online Quiz Application |
+| Project Type | BCA Major Project                |
+| Frontend     | HTML5, CSS3, JavaScript          |
+| Charts       | Chart.js                         |
+| Deployment   | GitHub Pages                     |
+| Repository   | Public                           |
+| License      | MIT                              |
+
+---
+
+# 🌟 Why This Project?
+
+This project demonstrates modern front-end development concepts by combining responsive web design, gamification, interactive dashboards, and quiz-based learning into a single educational platform.
+
+It is intended to showcase practical web development skills while providing an engaging user experience suitable for academic presentations and portfolio projects.
+
+---
+
+# 🙏 Acknowledgements
+
+Special thanks to:
+
+* Chandigarh University
+* Faculty Members
+* Project Guide
+* Open Source Community
+* GitHub
+* Chart.js Documentation
+
+for their support and learning resources.
+
+---
+
+# ⭐ Support
+
+If you found this project useful:
+
+* ⭐ Star this repository
+* 🍴 Fork the repository
+* 🐞 Report issues
+* 💡 Suggest improvements
+* 🤝 Contribute to future versions
+
+Your support is greatly appreciated.
+
+---
+
+# 📌 Future Versions
+
+Planned improvements include:
+
+* Spring Boot Backend
+* MySQL Database Integration
+* User Authentication
+* AI Recommendation System
+* Online Multiplayer Quiz
+* Cloud Deployment
+* Admin Dashboard
+* Email Notifications
+* Certificate Generation
+* Mobile Application
+
+---
+
+# 📄 License
+
+This project is licensed under the **MIT License**.
+
+For more details, refer to the `LICENSE` file included in this repository.
+
+---
+
+<div align="center">
+
+## 🚀 Live Demo
+
+### 🌐 https://abhinav8879.github.io/Ai-Quiz-App/
+
+---
+
+### ⭐ If you like this project, please give it a Star!
+
+**Made with ❤️ by Abhinav Kumar**
+
+**BCA Major Project • Chandigarh University**
+
+© 2026 Abhinav Kumar. All Rights Reserved.
+
+</div>
