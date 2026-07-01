@@ -57,5 +57,3 @@ To run this project locally, simply follow these steps:
 **ABHINAV KUMAR** *BCA Major Project (Session 2023–2026)* **Chandigarh University** UID: O23BCA110050
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/abhinav-kumar-ba9604299)
-
-cd Ai-Quiz-App
