@@ -1,66 +1,85 @@
 <div align="center">
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/logo.png?raw=true" alt="Logo" width="150" />
-  
-  # 🧠 AI-Based Online Quiz Application with Adaptive Difficulty Level
-  
-  **A Next-Generation Gamified Educational Dashboard built for the Modern Student.**
-  
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-06b6d4?style=for-the-badge&logo=github)](https://abhinav8879.github.io/Ai-Quiz-App/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-7c3aed?style=for-the-badge)](https://opensource.org/licenses/MIT)
-  
-  <p align="center">
-    <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" />
-    <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" />
-    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
-    <img src="https://img.shields.io/badge/Chart.js-FF6384?style=flat-square&logo=chartdotjs&logoColor=white" />
-  </p>
-</div>
 
-<br />
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/logo.png?raw=true" width="150" alt="AI Quiz App Logo"/>
 
-## 🖼️ Project Showcase
+# 🧠 AI-Based Online Quiz Application with Adaptive Difficulty Level
 
-<div align="center">
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/LogIn.png?raw=true" alt="Login Screen" width="80%"/>
-  <br><br>
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Dashboard.png?raw=true" alt="Dashboard Screen" width="80%"/>
-  <br><br>
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Quiz.png?raw=true" alt="Quiz Screen" width="80%"/>
-  <br><br>
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Teacher%20Panel.png?raw=true" alt="Teacher Panel Screen" width="80%"/>
+### *A Next-Generation Gamified Educational Dashboard for Smart Learning*
+
+<p>
+
+[![Live Demo](https://img.shields.io/badge/🌐-Live_Demo-06b6d4?style=for-the-badge)](https://abhinav8879.github.io/Ai-Quiz-App/)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge\&logo=github)](https://github.com/abhinav8879/Ai-Quiz-App)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+</p>
+
+<p>
+
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/>
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
+<img src="https://img.shields.io/badge/Chart.js-FF6384?style=flat-square&logo=chartdotjs&logoColor=white"/>
+<img src="https://img.shields.io/badge/Responsive-Yes-success?style=flat-square"/>
+<img src="https://img.shields.io/badge/Status-Completed-blue?style=flat-square"/>
+
+</p>
+
 </div>
 
 ---
 
-## 📋 About The Project
+# 📖 About the Project
 
-**AI-Based Online Quiz Application** is a comprehensive, interactive learning platform designed as a BCA Major Project for **Chandigarh University**. It transforms traditional studying into an engaging, gamified experience. By integrating real-time analytics and an adaptive UI, it helps students track their progress and identify weak areas dynamically.
+The **AI-Based Online Quiz Application with Adaptive Difficulty Level** is a modern educational web application developed as a **BCA Major Project** for **Chandigarh University (Session 2023–2026)**.
 
-### ✨ Key Features
-- **🤖 Adaptive Difficulty Engine:** AI dynamically scales question difficulty (Easy/Medium/Hard) based on real-time user answers.
-- **📊 Live Analytics Dashboard:** Interactive data visualization powered by Chart.js.
-- **👨‍🏫 Teacher Admin Panel:** Secure dashboard with a 1-click CSV report export for student performance data.
-- **🎮 Gamification:** Earn XP, coins, and track global leaderboard rankings with immersive sound effects.
-- **🎨 Premium UI:** Glassmorphism responsive design with custom cursor and Dark/Light mode toggle.
+The project aims to improve the online learning experience by combining a clean user interface with quiz-based learning, analytics, and gamification. It allows students to test their knowledge, monitor their progress, and enjoy an engaging learning environment.
+
+The application is designed using modern front-end technologies and demonstrates responsive design, interactive dashboards, and intelligent quiz management concepts.
 
 ---
 
-## 🚀 Installation & Setup
+# ✨ Key Features
 
-To run this project locally, simply follow these steps:
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/abhinav8879/Ai-Quiz-App.git](https://github.com/abhinav8879/Ai-Quiz-App.git)
+* 🔐 Secure Login Interface
+* 👨‍🎓 Student Dashboard
+* 👨‍🏫 Teacher Dashboard
+* 📝 Interactive Multiple Choice Quiz
+* 🤖 Adaptive Difficulty Concept
+* 📊 Live Performance Analytics
+* 📈 Progress Tracking
+* 🏆 Leaderboard System
+* 🎮 Gamification (XP & Coins)
+* 📋 Quiz Result Summary
+* 📥 CSV Report Export
+* 🌙 Dark / Light Mode
+* 📱 Fully Responsive Design
+* ⚡ Smooth Animations
+* 🎨 Premium Glassmorphism UI
+* 🔔 Interactive Notifications
 
 ---
 
-## 🔮 Future Scope (Data Architecture)
-In future phases, the data generated from the **CSV Exports** via the Teacher Panel will be integrated into a highly scalable backend data pipeline. The plan incorporates using **Python, the Pandas library, and Apache Spark** to run predictive modeling and deep learning algorithms on the structured student data, allowing for precise weakness detection and personalized AI study plan generation at an enterprise scale.
+# 🎯 Project Objectives
+
+* Build an engaging online quiz platform.
+* Improve learning through adaptive quiz concepts.
+* Provide real-time analytics for students.
+* Help teachers monitor student performance.
+* Create a responsive and modern educational dashboard.
+* Demonstrate front-end web development skills using HTML, CSS, and JavaScript.
 
 ---
 
-   ## 👨‍💻 Developer
-**ABHINAV KUMAR** *BCA Major Project (Session 2023–2026)* **Chandigarh University** UID: O23BCA110050
+# 🚀 Technologies Used
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/abhinav-kumar-ba9604299)
+| Technology       | Purpose                     |
+| ---------------- | --------------------------- |
+| HTML5            | Page Structure              |
+| CSS3             | Styling & Responsive Design |
+| JavaScript (ES6) | Application Logic           |
+| Chart.js         | Analytics Dashboard         |
+| GitHub Pages     | Project Deployment          |
+| Git              | Version Control             |
+
+---
