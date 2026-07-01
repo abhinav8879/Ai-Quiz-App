@@ -52,3 +52,8 @@ To run this project locally, simply follow these steps:
 1. **Clone the repository:**
    ```bash
    git clone [https://github.com/abhinav8879/Ai-Quiz-App.git](https://github.com/abhinav8879/Ai-Quiz-App.git)
+
+   ## 👨‍💻 Developer
+**ABHINAV KUMAR** *BCA Major Project (Session 2023–2026)* **Chandigarh University** UID: O23BCA110050
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0a66c2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/abhinav-kumar-ba9604299)
