@@ -279,3 +279,71 @@ function renderLiveChart() {
         }
     });
 }
+
+// --- GENERATE REAL PDF CERTIFICATE ---
+function downloadCertificate() {
+    showToast('Generating Real PDF Certificate...');
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const width = doc.internal.pageSize.getWidth();
+    const height = doc.internal.pageSize.getHeight();
+
+    doc.setFillColor(15, 15, 26);
+    doc.rect(0, 0, width, height, 'F');
+
+    doc.setDrawColor(124, 58, 237);
+    doc.setLineWidth(2);
+    doc.rect(10, 10, width - 20, height - 20);
+
+    doc.setDrawColor(6, 182, 212);
+    doc.setLineWidth(0.5);
+    doc.rect(15, 15, width - 30, height - 30);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(36);
+    doc.setFont("helvetica", "bold");
+    doc.text("CERTIFICATE OF COMPLETION", width / 2, 50, { align: "center" });
+
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(148, 163, 184);
+    doc.text("This is proudly presented to", width / 2, 70, { align: "center" });
+
+    doc.setFontSize(32);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(124, 58, 237);
+    doc.text("ABHINAV KUMAR", width / 2, 95, { align: "center" });
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(226, 232, 240);
+    const topic = selectedTopic || "Advanced AI Learning";
+    doc.text(`For successfully completing the quiz assessment on`, width / 2, 115, { align: "center" });
+    
+    doc.setFont("helvetica", "bold");
+    doc.text(`"${topic}"`, width / 2, 125, { align: "center" });
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`with an outstanding score of ${curScore} XP points.`, width / 2, 135, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.text(`Date: ${today}`, 40, 175);
+    doc.line(30, 170, 80, 170); 
+
+    doc.text("AI Engine Signature", width - 40, 175, { align: "right" });
+    doc.line(width - 90, 170, width - 30, 170); 
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(124, 58, 237);
+    doc.text("QuizAI - Chandigarh University", width / 2, 185, { align: "center" });
+
+    setTimeout(() => {
+        doc.save(`QuizAI_Certificate_${topic.replace(/\s+/g, '_')}.pdf`);
+        showToast('Certificate Downloaded Successfully!');
+    }, 1200);
+}
