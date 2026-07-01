@@ -1,0 +1,281 @@
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {});
+    });
+}
+
+const dot = document.getElementById("cursorDot");
+const outline = document.getElementById("cursorOutline");
+window.addEventListener("mousemove", function(e) {
+    if(dot && outline) {
+        dot.style.left = e.clientX + "px";
+        dot.style.top = e.clientY + "px";
+        outline.style.left = e.clientX + "px";
+        outline.style.top = e.clientY + "px";
+    }
+});
+function cursorHover() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1.5)"; outline.style.backgroundColor = "rgba(124,58,237,0.1)"; } }
+function cursorLeave() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1)"; outline.style.backgroundColor = "transparent"; } }
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    if(!t) return;
+    document.getElementById('toastMsg').innerText = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+    else document.exitFullscreen();
+}
+
+function toggleSidebar() {
+    document.getElementById('mainSidebar').classList.toggle('mobile-open');
+}
+
+function navTo(screenId, navId) {
+    document.querySelectorAll('.app-wrap main .screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    
+    document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
+    if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
+    
+    document.getElementById('mainSidebar').classList.remove('mobile-open');
+    clearInterval(timerInterval);
+    
+    if(screenId === 'analyticsScreen') setTimeout(renderLiveChart, 100);
+}
+
+function login() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appMain').style.display = 'flex';
+    showToast("Login Successful! JWT Token generated.");
+}
+
+function logout() {
+    document.getElementById('appMain').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    navTo('homeScreen', 'nav-home');
+}
+
+let selectedTopic = "General Knowledge";
+let selectedDiff = "adaptive";
+function pickTopic(el) {
+    document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTopic = el.dataset.topic;
+    document.getElementById('customTopic').value = '';
+}
+function pickDiff(diff, el) {
+    document.querySelectorAll('.diff-chip').forEach(b => b.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedDiff = diff;
+}
+
+let curQIndex = 0;
+let curScore = 0;
+let timerInterval;
+let timeLeft = 60;
+const totalQs = 5;
+let currentLevel = 'medium'; 
+
+const adaptiveQs = {
+    easy: [
+        { q: "Which language is used for styling web pages?", opts: ["HTML", "JQuery", "CSS", "XML"], ans: 2 },
+        { q: "What is the brain of a computer?", opts: ["RAM", "CPU", "Hard Disk", "Monitor"], ans: 1 }
+    ],
+    medium: [
+        { q: "What does 'PWA' stand for?", opts: ["Progressive Web App", "Private Web Access", "Public Wide Area", "Primary Web Architecture"], ans: 0 },
+        { q: "In MySQL, which command is used to fetch data?", opts: ["UPDATE", "INSERT", "DELETE", "SELECT"], ans: 3 }
+    ],
+    hard: [
+        { q: "Which HTTP status code signifies 'Not Found'?", opts: ["200", "404", "500", "403"], ans: 1 },
+        { q: "What does JWT stand for in backend security?", opts: ["Java Web Token", "JSON Web Token", "JavaScript Window Time", "None"], ans: 1 }
+    ]
+};
+
+function startQuiz() {
+    const inputTopic = document.getElementById('customTopic').value.trim();
+    if(inputTopic) selectedTopic = inputTopic;
+    
+    curQIndex = 0; curScore = 0; currentLevel = 'medium'; 
+    document.getElementById('topicCrumb').innerText = selectedTopic;
+    navTo('quizScreen', 'nav-quiz');
+    loadQuestion();
+}
+
+function loadQuestion() {
+    if(curQIndex >= totalQs) { endQuiz(); return; }
+    
+    document.getElementById('qIndexDisplay').innerText = curQIndex + 1;
+    document.getElementById('qTagDisplay').innerText = (curQIndex + 1) + " (" + currentLevel.toUpperCase() + " LEVEL)";
+    document.getElementById('scoreDisplay').innerText = curScore;
+    
+    const qList = adaptiveQs[currentLevel];
+    const qData = qList[curQIndex % qList.length]; 
+    
+    const qTextEl = document.getElementById('qText');
+    const optsBox = document.getElementById('optsList');
+    
+    qTextEl.innerText = "";
+    optsBox.innerHTML = '';
+    
+    let i = 0;
+    const txt = qData.q;
+    const speed = 25; 
+    
+    function typeWriter() {
+        if (i < txt.length) {
+            qTextEl.innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        } else {
+            qData.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerHTML = `<span class="opt-letter">${String.fromCharCode(65 + index)}</span> ${opt}`;
+                btn.onclick = () => handleAnswer(index, qData.ans, btn);
+                btn.onmouseenter = cursorHover;
+                btn.onmouseleave = cursorLeave;
+                btn.style.opacity = 0;
+                btn.style.animation = `fadeUp 0.3s ease forwards ${index * 0.1}s`;
+                optsBox.appendChild(btn);
+            });
+            startTimer(); 
+        }
+    }
+    typeWriter(); 
+}
+
+function handleAnswer(selected, correct, btn) {
+    clearInterval(timerInterval);
+    const buttons = document.querySelectorAll('.opt-btn');
+    buttons.forEach(b => b.disabled = true);
+    
+    const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
+    successSound.volume = 0.5; errorSound.volume = 0.4;
+    
+    if(selected === correct) {
+        btn.classList.add('correct');
+        curScore++;
+        successSound.play().catch(e=>console.log(e));
+        if(currentLevel === 'easy') currentLevel = 'medium';
+        else if(currentLevel === 'medium') currentLevel = 'hard';
+        showToast("Correct! Difficulty Increased 📈");
+    } else {
+        btn.classList.add('wrong');
+        buttons[correct].classList.add('correct');
+        errorSound.play().catch(e=>console.log(e));
+        if(currentLevel === 'hard') currentLevel = 'medium';
+        else if(currentLevel === 'medium') currentLevel = 'easy';
+        showToast("Incorrect! Difficulty Decreased 📉");
+    }
+    
+    document.getElementById('scoreDisplay').innerText = curScore;
+    setTimeout(() => { curQIndex++; loadQuestion(); }, 1500); 
+}
+
+function skipQuestion() {
+    clearInterval(timerInterval);
+    showToast("Question skipped. (-1 XP)");
+    curQIndex++;
+    loadQuestion();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timeLeft = 60;
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if(timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showToast("Time's up!");
+            skipQuestion();
+        }
+    }, 1000);
+}
+
+function updateTimerUI() {
+    const timerBox = document.getElementById('timerDisplay');
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+    document.getElementById('timeText').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    if(timeLeft > 20) timerBox.className = 'timer-widget safe';
+    else timerBox.className = 'timer-widget'; 
+}
+
+function endQuiz() {
+    clearInterval(timerInterval);
+    document.getElementById('rsScore').innerText = curScore;
+    navTo('resultsScreen', 'nav-quiz');
+}
+
+function exportDataToCSV() {
+    showToast('Preparing CSV Export...');
+    const exportData = [
+        ["Student Name", "UID", "Quiz Topic", "Score (XP)", "Accuracy", "Weakness"],
+        ["Aarav Mishra", "O23BCA110012", "Java Core OOPS", "5200", "92%", "None"],
+        ["Priya Singh", "O23BCA110088", "Data Structures", "4850", "88%", "Graphs"],
+        ["ABHINAV KUMAR", "O23BCA110050", "Cloud Computing", "2450", "87%", "Database Normalization"]
+    ];
+    let csvContent = "data:text/csv;charset=utf-8,";
+    exportData.forEach(function(rowArray) {
+        let row = rowArray.join(",");
+        csvContent += row + "\r\n";
+    });
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Student_Performance_Report.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => { showToast('Export Successful!'); }, 1000);
+}
+
+let performanceChartInstance = null;
+function renderLiveChart() {
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+    if (performanceChartInstance) { performanceChartInstance.destroy(); }
+    const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+    gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); 
+    gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
+    performanceChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Quiz Accuracy (%)',
+                data: [65, 72, 68, 85, 82, 90, 87], 
+                borderColor: '#7c3aed', 
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: '#06b6d4', 
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                fill: true,
+                tension: 0.4 
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#e2e8f0', font: { family: "'Inter', sans-serif", weight: '600' } } } },
+            scales: {
+                x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } } },
+                y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif" } }, min: 0, max: 100 }
+            }
+        }
+    });
+}
