@@ -349,22 +349,39 @@
 </div>
 
 <div id="loginScreen" class="login-wrap active">
-  <div class="card login-box">
+  <div class="card login-box" id="authBox">
       <div class="brain-icon" style="margin: 0 auto 15px; width: 60px; height: 60px; font-size: 1.8rem;"><i class="fas fa-brain"></i></div>
       <h2 style="font-family: 'Space Grotesk'; margin-bottom: 5px;">QuizAI Platform</h2>
-      <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.85rem;">Authenticate via JWT Security</p>
       
-      <input type="text" class="glass-input" placeholder="UID (e.g. O23BCA110050)" value="O23BCA110050" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
-      <input type="password" class="glass-input" placeholder="Password" value="password123" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
-      
-      <div style="display:flex; justify-content:space-between; font-size: 0.75rem; margin-bottom: 20px;">
-          <label><input type="checkbox" checked /> Remember Me</label>
-          <a href="#" style="color: var(--primary2); text-decoration: none;" onclick="showToast('Password reset link sent to email')">Forgot Password?</a>
+      <!-- 1. LOGIN FORM -->
+      <div id="loginFormBlock">
+          <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.85rem;">Student Authentication</p>
+          
+          <input type="text" id="loginUid" class="glass-input" placeholder="UID (e.g. O23BCA110050)" style="margin-bottom:12px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
+          <input type="password" id="loginPass" class="glass-input" placeholder="Password" style="margin-bottom:15px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
+          
+          <button class="btn btn-grad btn-full" onclick="handleLogin()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
+          
+          <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text3);">
+              Don't have an account? <a href="#" onclick="toggleAuth('register')" style="color: var(--primary2); font-weight: 600;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Create Profile</a>
+          </p>
       </div>
-      
-      <button class="btn btn-grad btn-full" onclick="login()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
-      
-      <p style="margin-top: 15px; font-size: 0.75rem; color: var(--text3);">Protected by Spring Boot REST API</p>
+
+      <!-- 2. REGISTER FORM (Hidden by default) -->
+      <div id="registerFormBlock" style="display: none;">
+          <p style="color: var(--text2); margin-bottom: 20px; font-size: 0.85rem;">Create New Profile</p>
+          
+          <input type="text" id="regName" class="glass-input" placeholder="Full Name (e.g. Abhinav Kumar)" style="margin-bottom:10px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()" />
+          <input type="text" id="regUid" class="glass-input" placeholder="University UID" style="margin-bottom:10px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()" />
+          <input type="email" id="regEmail" class="glass-input" placeholder="Email Address" style="margin-bottom:10px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()" />
+          <input type="password" id="regPass" class="glass-input" placeholder="Create Password" style="margin-bottom:15px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()" />
+          
+          <button class="btn btn-grad btn-full" onclick="handleRegister()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Create Profile <i class="fas fa-user-plus"></i></button>
+          
+          <p style="margin-top: 15px; font-size: 0.8rem; color: var(--text3);">
+              Already registered? <a href="#" onclick="toggleAuth('login')" style="color: var(--primary2); font-weight: 600;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Login Here</a>
+          </p>
+      </div>
   </div>
 </div>
 
