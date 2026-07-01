@@ -83,3 +83,170 @@ The application is designed using modern front-end technologies and demonstrates
 | Git              | Version Control             |
 
 ---
+
+# 🖼️ Project Showcase
+
+<div align="center">
+
+### 🔐 Login Screen
+
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/LogIn.png?raw=true" alt="Login Screen" width="90%"/>
+
+<br><br>
+
+### 📊 Student Dashboard
+
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Dashboard.png?raw=true" alt="Dashboard Screen" width="90%"/>
+
+<br><br>
+
+### 📝 Quiz Interface
+
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Quiz.png?raw=true" alt="Quiz Screen" width="90%"/>
+
+<br><br>
+
+### 👨‍🏫 Teacher Panel
+
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Teacher%20Panel.png?raw=true" alt="Teacher Panel" width="90%"/>
+
+</div>
+
+---
+
+# 🌐 Live Demo
+
+### 🚀 Visit the Project
+
+👉 **Live Website**
+
+**https://abhinav8879.github.io/Ai-Quiz-App/**
+
+---
+
+# 📂 Project Structure
+
+```text
+Ai-Quiz-App/
+│
+├── assets/
+│   ├── css/
+│   ├── js/
+│   ├── images/
+│   ├── sounds/
+│   └── icons/
+│
+├── index.html
+├── login.html
+├── dashboard.html
+├── quiz.html
+├── teacher.html
+├── leaderboard.html
+├── result.html
+│
+├── README.md
+├── LICENSE
+└── .gitignore
+```
+
+---
+
+# ⚙️ Installation & Setup
+
+## 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/abhinav8879/Ai-Quiz-App.git
+```
+
+---
+
+## 2️⃣ Open the Project Folder
+
+```bash
+cd Ai-Quiz-App
+```
+
+---
+
+## 3️⃣ Open in Visual Studio Code
+
+```bash
+code .
+```
+
+---
+
+## 4️⃣ Run the Project
+
+Open **index.html** directly in your browser
+
+**OR**
+
+Install the **Live Server** extension in VS Code and click **Go Live**.
+
+---
+
+# 💻 System Requirements
+
+| Requirement      | Version                 |
+| ---------------- | ----------------------- |
+| Operating System | Windows / macOS / Linux |
+| Browser          | Chrome, Edge, Firefox   |
+| VS Code          | Latest Version          |
+| Git              | Optional                |
+
+---
+
+# 📸 Main Modules
+
+### 🔐 Authentication
+
+* Login Page
+* Registration Interface
+* User Validation
+
+### 👨‍🎓 Student Dashboard
+
+* Welcome Screen
+* Performance Overview
+* Recent Quiz History
+* Progress Tracking
+
+### 📝 Quiz Module
+
+* Multiple Choice Questions
+* Timer
+* Score Calculation
+* Adaptive Difficulty Concept
+
+### 📊 Analytics Module
+
+* Charts
+* Performance Graphs
+* Accuracy Analysis
+* Weak Topic Detection
+
+### 👨‍🏫 Teacher Module
+
+* Student Management
+* Quiz Management
+* CSV Report Export
+* Performance Dashboard
+
+---
+
+# 🎨 UI Highlights
+
+* Glassmorphism Design
+* Responsive Layout
+* Interactive Cards
+* Animated Buttons
+* Hover Effects
+* Smooth Page Transitions
+* Mobile Friendly
+* Professional Dashboard
+* Modern Color Palette
+* Clean User Experience
+
+---
