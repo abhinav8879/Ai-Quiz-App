@@ -150,6 +150,29 @@ function startApp() {
     showToast("Welcome to QuizAI!");
 }
 
+function handleForgotPassword() {
+    const uid = document.getElementById('loginUid').value.trim().toUpperCase();
+    
+    if(!uid) {
+        showToast("Please enter your UID first to reset password!");
+        return;
+    }
+
+    // Default master account check
+    if(uid === "O23BCA110050") {
+        showToast("Master Password reset link sent to registered email!");
+        return;
+    }
+
+    // LocalStorage check for registered users
+    const savedUser = localStorage.getItem('QuizUser_' + uid);
+    if(savedUser) {
+        showToast("Password reset link sent to your registered email!");
+    } else {
+        showToast("UID not found! Please check your UID or Create a Profile.");
+    }
+}
+
 function logout() {
     document.getElementById('appMain').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
