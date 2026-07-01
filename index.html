@@ -359,7 +359,12 @@
           
          <input type="text" id="loginUid" class="glass-input" placeholder="UID (e.g. O23BCA110050)" value="O23BCA110050" style="margin-bottom:12px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
 <input type="password" id="loginPass" class="glass-input" placeholder="Password" value="password123" style="margin-bottom:15px;" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"/>
-          
+
+        <div style="display:flex; justify-content:space-between; font-size: 0.75rem; margin-bottom: 20px;">
+              <label style="color: var(--text2); cursor: pointer;"><input type="checkbox" checked /> Remember Me</label>
+              <a href="#" style="color: var(--primary2); text-decoration: none; font-weight: 600;" onclick="handleForgotPassword()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Forgot Password?</a>
+          </div>
+        
           <button class="btn btn-grad btn-full" onclick="handleLogin()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
           
           <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text3);">
