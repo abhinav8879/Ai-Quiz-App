@@ -21,7 +21,7 @@
 ## 🖼️ Project Showcase
 
 <div align="center">
-  <img src="[https://via.placeholder.com/800x400/0f0f1a/e2e8f0?text=Dashboard+Screenshot+(Upload+to+assets/images/screenshot1.png)](https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Screenshot1.png?raw=true)" alt="Dashboard Screen" width="80%"/>
+  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Screenshot1.png?raw=true" alt="Dashboard Screen" width="80%"/>
   <br />
   <img src="[https://via.placeholder.com/800x400/13131f/e2e8f0?text=Live+Analytics+Screenshot+(Upload+to+assets/images/screenshot2.png)](https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Screenshot2.png?raw=true)" alt="Analytics Screen" width="80%"/>
 </div>
