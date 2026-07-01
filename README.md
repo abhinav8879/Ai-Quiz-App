@@ -131,16 +131,16 @@ Ai-Quiz-App/
 │
 ├── assets/
 │   ├── css/
-│   │   └── style.css       # All UI & Glassmorphism styles
+│   │   └── style.css
 │   ├── js/
-│   │   └── script.js       # Core Application Logic, Quiz & jsPDF
-│   ├── images/             # Project Screenshots & Logos
-│   └── icons/              # Favicons
+│   │   └── script.js
+│   ├── images/
+│   └── icons/
 │
-├── index.html              # Main SPA File (Contains Login, Dashboard, Quiz, Leaderboard)
-├── README.md               # Project Documentation
-├── .gitignore              # Git Ignore Rules
-└── LICENSE                 # MIT License
+├── index.html 
+├── README.md
+├── .gitignore
+└── LICENSE
 
 ---
 
