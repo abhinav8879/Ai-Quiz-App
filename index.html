@@ -750,26 +750,35 @@ function pickDiff(diff, el) {
     selectedDiff = diff;
 }
 
-// --- MOCK QUIZ ENGINE & TIMER ---
+// --- ADAPTIVE QUIZ ENGINE & TIMER ---
 let curQIndex = 0;
 let curScore = 0;
 let timerInterval;
 let timeLeft = 60;
 const totalQs = 5;
+let currentLevel = 'medium'; // Quiz humesha Medium se start hoga
 
-const mockQs = [
-    { q: "Which HTTP status code signifies 'Not Found'?", opts: ["200", "404", "500", "403"], ans: 1 },
-    { q: "What does JWT stand for in backend security?", opts: ["Java Web Token", "JSON Web Token", "JavaScript Window Time", "None of above"], ans: 1 },
-    { q: "Which framework is used for building robust Java APIs?", opts: ["React", "Laravel", "Spring Boot", "Express"], ans: 2 },
-    { q: "What does 'PWA' stand for?", opts: ["Progressive Web App", "Private Web Access", "Public Wide Area", "Primary Web Architecture"], ans: 0 },
-    { q: "In MySQL, which command is used to fetch data?", opts: ["UPDATE", "INSERT", "DELETE", "SELECT"], ans: 3 }
-];
+// Adaptive Question Bank (Easy, Medium, Hard)
+const adaptiveQs = {
+    easy: [
+        { q: "Which language is used for styling web pages?", opts: ["HTML", "JQuery", "CSS", "XML"], ans: 2 },
+        { q: "What is the brain of a computer?", opts: ["RAM", "CPU", "Hard Disk", "Monitor"], ans: 1 }
+    ],
+    medium: [
+        { q: "What does 'PWA' stand for?", opts: ["Progressive Web App", "Private Web Access", "Public Wide Area", "Primary Web Architecture"], ans: 0 },
+        { q: "In MySQL, which command is used to fetch data?", opts: ["UPDATE", "INSERT", "DELETE", "SELECT"], ans: 3 }
+    ],
+    hard: [
+        { q: "Which HTTP status code signifies 'Not Found'?", opts: ["200", "404", "500", "403"], ans: 1 },
+        { q: "What does JWT stand for in backend security?", opts: ["Java Web Token", "JSON Web Token", "JavaScript Window Time", "None"], ans: 1 }
+    ]
+};
 
 function startQuiz() {
     const inputTopic = document.getElementById('customTopic').value.trim();
     if(inputTopic) selectedTopic = inputTopic;
     
-    curQIndex = 0; curScore = 0;
+    curQIndex = 0; curScore = 0; currentLevel = 'medium'; // Reset level
     document.getElementById('topicCrumb').innerText = selectedTopic;
     navTo('quizScreen', 'nav-quiz');
     loadQuestion();
@@ -779,21 +788,23 @@ function loadQuestion() {
     if(curQIndex >= totalQs) { endQuiz(); return; }
     
     document.getElementById('qIndexDisplay').innerText = curQIndex + 1;
-    document.getElementById('qTagDisplay').innerText = curQIndex + 1;
+    // UI mein Question ke upar level bhi dikhayega (e.g. Question 1 - MEDIUM LEVEL)
+    document.getElementById('qTagDisplay').innerText = (curQIndex + 1) + " (" + currentLevel.toUpperCase() + " LEVEL)";
     document.getElementById('scoreDisplay').innerText = curScore;
     
-    const qData = mockQs[curQIndex % mockQs.length];
+    // Level ke hisaab se question uthana
+    const qList = adaptiveQs[currentLevel];
+    const qData = qList[curQIndex % qList.length]; 
+    
     const qTextEl = document.getElementById('qText');
     const optsBox = document.getElementById('optsList');
     
-    // UI Reset before typing
     qTextEl.innerText = "";
     optsBox.innerHTML = '';
     
-    // --- AI TYPING EFFECT LOGIC ---
     let i = 0;
     const txt = qData.q;
-    const speed = 25; // Speed of typing (in milliseconds)
+    const speed = 25; 
     
     function typeWriter() {
         if (i < txt.length) {
@@ -801,7 +812,6 @@ function loadQuestion() {
             i++;
             setTimeout(typeWriter, speed);
         } else {
-            // Typing khatam hone ke baad options show karein
             qData.opts.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'opt-btn';
@@ -809,20 +819,50 @@ function loadQuestion() {
                 btn.onclick = () => handleAnswer(index, qData.ans, btn);
                 btn.onmouseenter = cursorHover;
                 btn.onmouseleave = cursorLeave;
-                // Add a small fade-in animation for options
                 btn.style.opacity = 0;
                 btn.style.animation = `fadeUp 0.3s ease forwards ${index * 0.1}s`;
                 optsBox.appendChild(btn);
             });
-            startTimer(); // Timer starts after options appear
+            startTimer(); 
         }
     }
-    
-    typeWriter(); // Trigger typing effect
+    typeWriter(); 
 }
 
-// --- HANDLE ANSWER WITH SOUND EFFECTS ---
 function handleAnswer(selected, correct, btn) {
+    clearInterval(timerInterval);
+    const buttons = document.querySelectorAll('.opt-btn');
+    buttons.forEach(b => b.disabled = true);
+    
+    // Sound Effects
+    const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
+    successSound.volume = 0.5; errorSound.volume = 0.4;
+    
+    if(selected === correct) {
+        btn.classList.add('correct');
+        curScore++;
+        successSound.play();
+        
+        // ADAPTIVE LOGIC: Sahi jawab par difficulty badhayenge
+        if(currentLevel === 'easy') currentLevel = 'medium';
+        else if(currentLevel === 'medium') currentLevel = 'hard';
+        showToast("Correct! Difficulty Increased 📈");
+        
+    } else {
+        btn.classList.add('wrong');
+        buttons[correct].classList.add('correct');
+        errorSound.play();
+        
+        // ADAPTIVE LOGIC: Galat jawab par difficulty ghatayenge
+        if(currentLevel === 'hard') currentLevel = 'medium';
+        else if(currentLevel === 'medium') currentLevel = 'easy';
+        showToast("Incorrect! Difficulty Decreased 📉");
+    }
+    
+    document.getElementById('scoreDisplay').innerText = curScore;
+    setTimeout(() => { curQIndex++; loadQuestion(); }, 1500); // Thoda zyada time diya taaki user dekh sake
+}
     clearInterval(timerInterval);
     const buttons = document.querySelectorAll('.opt-btn');
     buttons.forEach(b => b.disabled = true);
