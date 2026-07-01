@@ -243,3 +243,20 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .trend-up { color: var(--easy); font-size: 0.75rem; font-weight: 600; }
 .trend-down { color: var(--hard); font-size: 0.75rem; font-weight: 600; }
 .tech-badge { background: var(--bg2); border: 1px solid var(--border2); padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; color: var(--text2); margin-right: 4px; display: inline-block; font-weight: 600; }
+
+/* Mobile Optimization for Navbar */
+@media screen and (max-width: 600px) {
+    .nav-left .cu-logo-wrap img {
+        height: 35px !important; /* Logo size thoda set kiya */
+    }
+    
+    .nav-right {
+        gap: 8px !important; /* Avatar aur icons ke beech perfect gap */
+    }
+    
+    /* Stats cards ko mobile par thoda aur accha look dene ke liye */
+    .stat-card {
+        padding: 15px !important;
+    }
+}
+
