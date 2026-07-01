@@ -1,0 +1,43 @@
+# ==========================================
+# 🛑 AI Quiz App - .gitignore
+# ==========================================
+
+# 1. Editor & IDE Settings (Inhe upload nahi karna chahiye)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 2. Operating System Files (Mac/Windows ka kachra)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# 3. Future Backend & Package Files (Agar aage chalkar Node.js ya Python use kiya)
+node_modules/
+npm-debug.log
+yarn-error.log
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.env.local
+
+# 4. Logs and Databases (Agar aage use kiya)
+*.log
+*.sqlite
+*.db
+
+# 5. Build Folders
+dist/
+build/
