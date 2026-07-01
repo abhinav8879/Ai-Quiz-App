@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://vectorseek.com/wp-content/uploads/2023/09/Chandigarh-University-CU-Logo-Vector.svg-.png" alt="Logo" width="150" />
+  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/logo.png?raw=true" alt="Logo" width="150" />
   
   # 🧠 AI-Based Online Quiz Application with Adaptive Difficulty Level
   
