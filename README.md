@@ -125,22 +125,24 @@ The application is designed using modern front-end technologies and demonstrates
 
 ---
 
-# 📂 Project Structure (Single Page Application)
+# 📂 Project Structure
 
+```text
 Ai-Quiz-App/
 │
 ├── assets/
 │   ├── css/
-│   │   └── style.css
 │   ├── js/
-│   │   └── script.js
 │   ├── images/
+│   ├── sounds/
 │   └── icons/
 │
-├── index.html 
+├── index.html
+│
 ├── README.md
-├── .gitignore
-└── LICENSE
+├── LICENSE
+└── .gitignore
+```
 
 ---
 
@@ -243,6 +245,7 @@ Install the **Live Server** extension in VS Code and click **Go Live**.
 * Clean User Experience
 
 ---
+
 
 # 🔄 Application Workflow
 
