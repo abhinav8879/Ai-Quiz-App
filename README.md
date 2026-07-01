@@ -1,11 +1,11 @@
 <div align="center">
   <img src="https://vectorseek.com/wp-content/uploads/2023/09/Chandigarh-University-CU-Logo-Vector.svg-.png" alt="Logo" width="150" />
   
-  # 🧠 QuizAI - Advanced Learning Platform
+  # 🧠 AI-Based Online Quiz Application with Adaptive Difficulty Level
   
   **A Next-Generation Gamified Educational Dashboard built for the Modern Student.**
   
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-06b6d4?style=for-the-badge&logo=github)](<https://abhinav8879.github.io/Ai-Quiz-App/>)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-View_Project-06b6d4?style=for-the-badge&logo=github)](https://abhinav8879.github.io/Ai-Quiz-App/)
   [![License: MIT](https://img.shields.io/badge/License-MIT-7c3aed?style=for-the-badge)](https://opensource.org/licenses/MIT)
   
   <p align="center">
@@ -21,25 +21,27 @@
 ## 🖼️ Project Showcase
 
 <div align="center">
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/LogIn.png?raw=true" alt="Dashboard Screen" width="80%"/>
+  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/LogIn.png?raw=true" alt="Login Screen" width="80%"/>
+  <br><br>
   <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Dashboard.png?raw=true" alt="Dashboard Screen" width="80%"/>
-  <br />
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Quiz.png?raw=true" alt="Analytics Screen" width="80%"/>
-  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Teacher%20Panel.png?raw=true" alt="Analytics Screen" width="80%"/>
+  <br><br>
+  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Quiz.png?raw=true" alt="Quiz Screen" width="80%"/>
+  <br><br>
+  <img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Teacher%20Panel.png?raw=true" alt="Teacher Panel Screen" width="80%"/>
 </div>
 
 ---
 
 ## 📋 About The Project
 
-**QuizAI** is a comprehensive, interactive learning platform designed as a BCA Major Project. It transforms traditional studying into an engaging, gamified experience. By integrating real-time analytics and an adaptive UI, it helps students track their progress and identify weak areas dynamically.
+**AI-Based Online Quiz Application** is a comprehensive, interactive learning platform designed as a BCA Major Project for **Chandigarh University**. It transforms traditional studying into an engaging, gamified experience. By integrating real-time analytics and an adaptive UI, it helps students track their progress and identify weak areas dynamically.
 
 ### ✨ Key Features
-- **🎨 Glassmorphism UI:** Premium, responsive design with Dark/Light mode toggle.
-- **🎮 Gamification Engine:** Earn XP, coins, and global leaderboard rankings.
-- **📊 Real-Time Analytics:** Interactive performance charts powered by Chart.js.
-- **🤖 Adaptive AI Quizzes:** Dynamic difficulty settings and simulated AI typing effects.
-- **👨‍🏫 Teacher Admin Panel:** Secure dashboard for mock data export and quiz management.
+- **🤖 Adaptive Difficulty Engine:** AI dynamically scales question difficulty (Easy/Medium/Hard) based on real-time user answers.
+- **📊 Live Analytics Dashboard:** Interactive data visualization powered by Chart.js.
+- **👨‍🏫 Teacher Admin Panel:** Secure dashboard with a 1-click CSV report export for student performance data.
+- **🎮 Gamification:** Earn XP, coins, and track global leaderboard rankings with immersive sound effects.
+- **🎨 Premium UI:** Glassmorphism responsive design with custom cursor and Dark/Light mode toggle.
 
 ---
 
