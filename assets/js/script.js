@@ -52,10 +52,102 @@ function navTo(screenId, navId) {
     if(screenId === 'analyticsScreen') setTimeout(renderLiveChart, 100);
 }
 
-function login() {
+// --- AUTHENTICATION & PROFILE SYSTEM ---
+
+function toggleAuth(mode) {
+    if(mode === 'register') {
+        document.getElementById('loginFormBlock').style.display = 'none';
+        document.getElementById('registerFormBlock').style.display = 'block';
+    } else {
+        document.getElementById('registerFormBlock').style.display = 'none';
+        document.getElementById('loginFormBlock').style.display = 'block';
+    }
+}
+
+function handleRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const uid = document.getElementById('regUid').value.trim().toUpperCase();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+
+    if(!name || !uid || !email || !pass) {
+        showToast("Please fill all details!");
+        return;
+    }
+
+    // Save to Browser's LocalStorage (Fake Backend)
+    const userObj = { name: name, uid: uid, email: email, pass: pass };
+    localStorage.setItem('QuizUser_' + uid, JSON.stringify(userObj));
+    
+    showToast("Profile Created Successfully! Please Login.");
+    
+    // Clear fields & Switch to Login
+    document.getElementById('regName').value = '';
+    document.getElementById('regUid').value = '';
+    document.getElementById('regEmail').value = '';
+    document.getElementById('regPass').value = '';
+    toggleAuth('login');
+    
+    // Pre-fill UID in login screen for convenience
+    document.getElementById('loginUid').value = uid;
+}
+
+function handleLogin() {
+    const uid = document.getElementById('loginUid').value.trim().toUpperCase();
+    const pass = document.getElementById('loginPass').value.trim();
+
+    if(!uid || !pass) {
+        showToast("Enter UID and Password!");
+        return;
+    }
+
+    // Default Admin Access (Taki aapka purana login hamesha chale)
+    if(uid === "O23BCA110050" && pass === "password123") {
+        updateDashboardData("ABHINAV KUMAR", uid);
+        startApp();
+        return;
+    }
+
+    // Check LocalStorage for registered users
+    const savedUser = localStorage.getItem('QuizUser_' + uid);
+    if(savedUser) {
+        const userData = JSON.parse(savedUser);
+        if(userData.pass === pass) {
+            updateDashboardData(userData.name, userData.uid);
+            startApp();
+        } else {
+            showToast("Incorrect Password!");
+        }
+    } else {
+        showToast("User not found! Please Create a Profile first.");
+    }
+}
+
+// Update UI with the logged-in user's details
+function updateDashboardData(name, uid) {
+    // 1. Update Navbar Name & UID
+    document.querySelector('.avatar-info .name').innerText = name.toUpperCase();
+    document.querySelector('.avatar-info .uid').innerText = "UID: " + uid;
+    
+    // 2. Generate Avatar Initials (e.g. Abhinav Kumar -> AK)
+    let initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    document.querySelector('.avatar-ring').innerText = initials;
+
+    // 3. Update Sidebar Project Info
+    const projectBoxVals = document.querySelectorAll('.sidebar-project-box .box-val');
+    if(projectBoxVals.length > 1) {
+        projectBoxVals[0].innerText = name.toUpperCase();
+        projectBoxVals[1].innerText = uid;
+    }
+    
+    // 4. Save name globally so Certificate can use it
+    window.currentLoggedUser = name.toUpperCase();
+}
+
+function startApp() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appMain').style.display = 'flex';
-    showToast("Login Successful! JWT Token generated.");
+    showToast("Welcome to QuizAI!");
 }
 
 function logout() {
@@ -313,7 +405,7 @@ function downloadCertificate() {
     doc.setFontSize(32);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(124, 58, 237);
-    doc.text("ABHINAV KUMAR", width / 2, 95, { align: "center" });
+    doc.text(window.currentLoggedUser || "ABHINAV KUMAR", width / 2, 95, { align: "center" });
 
     doc.setFontSize(14);
     doc.setFont("helvetica", "normal");
