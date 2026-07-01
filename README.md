@@ -91,7 +91,7 @@ The application is designed using modern front-end technologies and demonstrates
 
 ### 🔐 Login Screen
 
-<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/LogIn.png?raw=true" alt="Login Screen" width="90%"/>
+<img src="https://github.com/abhinav8879/Ai-Quiz-App/blob/main/assets/images/Login.png?raw=true" alt="Login Screen" width="90%"/>
 
 <br><br>
 
