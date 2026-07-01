@@ -12,9 +12,14 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- EXTERNAL CSS LINK -->
 <link rel="stylesheet" href="style.css">
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- jsPDF Library for Certificate Generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -26,12 +31,9 @@
 <nav class="navbar">
   <div class="nav-left">
     <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-    
- <div class="cu-logo-wrap">
-  <img src="https://vectorseek.com/wp-content/uploads/2023/09/Chandigarh-University-CU-Logo-Vector.svg-.png" 
-       alt="Chandigarh University" 
-       style="height: 40px; object-fit: contain; background: white; padding: 4px; border-radius: 6px;" />
-</div>
+    <div class="cu-logo-wrap">
+      <img src="https://vectorseek.com/wp-content/uploads/2023/09/Chandigarh-University-CU-Logo-Vector.svg-.png" alt="Chandigarh University" style="height: 40px; object-fit: contain; background: white; padding: 4px; border-radius: 6px;" />
+    </div>
     <div class="nav-sep"></div>
     <a class="quiz-brand" href="#" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">
       <div class="brain-icon"><i class="fas fa-brain"></i></div>
@@ -61,7 +63,6 @@
 </nav>
 
 <div class="app-wrap" id="appMain" style="display:none;">
-
   <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-nav">
       <div class="s-section-label">Student Portal</div>
@@ -91,9 +92,7 @@
   </aside>
 
   <main class="main">
-
     <div id="homeScreen" class="screen active">
-      
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon-wrap si-purple"><i class="fas fa-tasks"></i></div>
@@ -199,7 +198,7 @@
           <div style="display:flex; gap:10px; justify-content: center; flex-wrap: wrap;">
             <button class="btn btn-grad" onclick="navTo('homeScreen', 'nav-home')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-home"></i> Home</button>
             <button class="btn btn-ghost" onclick="exportDataToCSV()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-file-csv"></i> Export CSV</button>
-            <button class="btn btn-ghost" onclick="showToast('Downloading Certificate with QR...')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-certificate"></i> Get Certificate</button>
+            <button class="btn btn-ghost" onclick="downloadCertificate()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-certificate"></i> Get Certificate</button>
           </div>
       </div>
     </div>
@@ -316,7 +315,7 @@
                     <h3 style="font-size: 1rem;">Python Masterclass</h3>
                     <p style="font-size: 0.75rem; color: var(--text3);">Completed on June 20, 2026 • ID: CU-7829</p>
                 </div>
-                <button class="btn btn-ghost" onclick="showToast('Downloading verified PDF with QR...')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-download"></i> Download PDF</button>
+                <button class="btn btn-ghost" onclick="downloadCertificate()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-download"></i> Download PDF</button>
             </div>
         </div>
     </div>
@@ -393,6 +392,8 @@
   </div>
 </footer>
 
+<!-- EXTERNAL JAVASCRIPT LINK -->
 <script src="script.js"></script>
+
 </body>
 </html>
