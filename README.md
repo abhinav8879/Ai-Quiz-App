@@ -48,6 +48,7 @@ The application is designed using modern front-end technologies and demonstrates
 * 🤖 Adaptive Difficulty Concept
 * 📊 Live Performance Analytics
 * 📈 Progress Tracking
+* 📜 Real-Time PDF Certificate Generation (jsPDF)
 * 🏆 Leaderboard System
 * 🎮 Gamification (XP & Coins)
 * 📋 Quiz Result Summary
@@ -391,7 +392,6 @@ The project can be extended with several advanced features:
 * 🎤 Voice-Based Quiz
 * 🌍 Multi-language Support
 * 🏆 Global Leaderboard
-* 📜 Certificate Generation
 * 💬 AI Chatbot for Learning Assistance
 * 🧠 Personalized Study Plans
 
