@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>QuizAI — Chandigarh University</title>
+<title>AI-Based Online Quiz Application with Adaptive Difficulty Level</title>
 
 <meta name="theme-color" content="#4f46e5"/>
 <meta name="description" content="QuizAI - Advanced AI Learning Platform"/>
@@ -12,10 +12,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
-/* THEMES & VARIABLES */
 :root {
   --primary:#4f46e5; --primary2:#7c3aed; --accent:#06b6d4;
   --grad:linear-gradient(135deg,#4f46e5,#7c3aed,#06b6d4);
@@ -36,22 +37,17 @@
   --text3:#64748b; --glow:rgba(79,70,229,0.2);
 }
 
-body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; transition: background 0.3s, color 0.3s;  }
+body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; transition: background 0.3s, color 0.3s; cursor: none; }
 
-/* ANIMATED BG REMOVED FOR A SIMPLE LOOK */
-
-/* CUSTOM CURSOR */
 .cursor-dot { width: 8px; height: 8px; background: var(--primary2); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 .cursor-outline { width: 30px; height: 30px; border: 2px solid var(--primary2); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
 a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height: 45px; background: rgba(124,58,237,0.1); }
 
-/* TOAST NOTIFICATION */
 #toast { position: fixed; bottom: 30px; right: 30px; background: var(--surface); border-left: 4px solid var(--primary2); padding: 16px 24px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000; font-weight: 600; display: none; animation: fadeUp 0.4s ease; backdrop-filter: blur(10px); }
 
-/* NAVBAR */
 .navbar{ position:sticky;top:0;z-index:200;min-height:68px; background:var(--bg); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex;align-items:center;justify-content:space-between; padding:0 28px; flex-wrap: wrap; }
 .nav-left{display:flex;align-items:center;gap:16px;}
-.menu-toggle { display: none; background: transparent; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+.menu-toggle { display: none; background: transparent; border: none; color: var(--text); font-size: 1.5rem; cursor: none; }
 .cu-logo-wrap{display:flex;align-items:center;}
 .cu-logo-wrap img{height:40px;object-fit:contain;}
 .nav-sep{width:1px;height:32px;background:var(--border2);margin:0 4px;}
@@ -61,19 +57,17 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .quiz-brand-text span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .nav-badge{ background:linear-gradient(135deg,rgba(79,70,229,0.25),rgba(124,58,237,0.25)); border:1px solid rgba(124,58,237,0.4); color:var(--primary2);font-size:0.65rem;font-weight:600; padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase; }
 
-/* GAMIFICATION & NAV RIGHT */
 .nav-right{display:flex;align-items:center;gap:12px;}
 .game-stats { display: flex; gap: 8px; font-size: 0.75rem; font-weight: 700; }
 .game-pill { background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
 .game-pill.xp { color: var(--medium); } .game-pill.coins { color: var(--easy); }
-.icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;  transition: 0.2s; }
+.icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: 0.2s; }
 .icon-btn:hover { background: var(--surface2); }
 .nav-avatar-wrap{display:flex;align-items:center;gap:10px;}
 .avatar-ring{ width:38px;height:38px;border-radius:50%; background:var(--grad); display:flex;align-items:center;justify-content:center; color:#fff;font-weight:700;font-size:0.85rem; box-shadow:0 0 12px var(--glow); }
 .avatar-info .name{font-size:0.82rem;font-weight:600;color:var(--text);}
 .avatar-info .uid{font-size:0.68rem;color:var(--text3);}
 
-/* SIDEBAR */
 .app-wrap{display:flex;flex:1;position:relative;z-index:1;}
 .sidebar{ width:248px;flex-shrink:0; background:var(--bg2); border-right:1px solid var(--border); padding:16px 0;min-height:calc(100vh - 68px); display:flex;flex-direction:column; transition: 0.3s ease-in-out; }
 .sidebar-nav{flex:1;}
@@ -84,7 +78,6 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .s-item i{width:18px;text-align:center;font-size:0.9rem;}
 .s-divider{border:none;border-top:1px solid var(--border);margin:10px 0;}
 
-/* SIDEBAR PROJECT INFO */
 .sidebar-project-box{ margin:12px;border-radius:10px;overflow:hidden; border:1px solid var(--border); }
 .sidebar-project-box .box-header{ background:var(--grad);padding:10px 14px; font-size:0.72rem;font-weight:700;color:#fff;letter-spacing:.5px;text-transform:uppercase; }
 .sidebar-project-box .box-body{ background:var(--surface);padding:12px 14px; }
@@ -93,18 +86,15 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .box-key{font-size:0.65rem;color:var(--text3);min-width:56px;font-weight:500;}
 .box-val{font-size:0.72rem;color:var(--text2);font-weight:600;}
 
-/* MAIN SCREENS */
 .main{flex:1;padding:28px 32px;max-width:960px; margin: 0 auto; width: 100%;}
 .screen{display:none;animation:fadeUp .4s ease;}
 .screen.active{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* UI CARDS */
 .card{ background:var(--surface);border:1px solid var(--border); border-radius:var(--r);padding:22px;margin-bottom:20px; backdrop-filter:blur(8px); }
 .sec-title{ display:flex;align-items:center;gap:10px; font-size:0.78rem;font-weight:700;color:var(--text2); text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px; }
 .sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* STAT CARDS */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
 .stat-card{ background:var(--surface);border:1px solid var(--border);border-radius:var(--r); padding:18px 16px;transition:all .2s;position:relative;overflow:hidden; }
 .stat-icon-wrap{ width:42px;height:42px;border-radius:10px; display:flex;align-items:center;justify-content:center; font-size:1.1rem;margin-bottom:12px; }
@@ -115,16 +105,14 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .stat-num{font-size:1.5rem;font-weight:800;color:var(--text);font-family:'Space Grotesk',sans-serif;}
 .stat-lbl{font-size:0.7rem;color:var(--text3);margin-top:2px;}
 
-/* TOPIC GRID */
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
 .topic-card{ background:var(--surface);border:1.5px solid var(--border); border-radius:10px;padding:18px 12px;text-align:center;cursor:none; transition:all .2s;position:relative;overflow:hidden; }
 .topic-card.selected{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(124,58,237,0.2);}
 .topic-emoji{font-size:2rem;display:block;margin-bottom:8px;}
 .topic-name{font-size:0.75rem;font-weight:600;color:var(--text2);}
 
-/* INPUTS & BUTTONS */
 .custom-input-wrap{display:flex;gap:10px;margin-top:14px;}
-.glass-input{ flex:1;background:var(--surface);border:1.5px solid var(--border); border-radius:10px;padding:11px 16px; color:var(--text);font-family:'Inter',sans-serif;font-size:0.875rem;outline:none; transition:all .2s;  width: 100%;}
+.glass-input{ flex:1;background:var(--surface);border:1.5px solid var(--border); border-radius:10px;padding:11px 16px; color:var(--text);font-family:'Inter',sans-serif;font-size:0.875rem;outline:none; transition:all .2s; cursor:none; width: 100%;}
 .glass-input:focus{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
 
 .btn{ padding:11px 24px;border-radius:10px;font-size:0.875rem;font-weight:600; cursor:none;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px; font-family:'Inter',sans-serif; }
@@ -133,14 +121,12 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .btn-danger{background:rgba(239,68,68,0.1);border:1.5px solid rgba(239,68,68,0.3);color:#f87171;}
 .btn-full{width:100%;justify-content:center;padding:14px;font-size:1rem;border-radius:12px;}
 
-/* DIFFICULTY ROW */
 .diff-row{display:flex;gap:10px;flex-wrap:wrap;}
 .diff-chip{ padding:9px 20px;border-radius:20px; border:1.5px solid var(--border);background:var(--surface); font-size:0.8rem;font-weight:600;color:var(--text2);cursor:none;transition:all .2s; }
 .diff-chip.adaptive.sel{border-color:var(--primary2);background:rgba(124,58,237,0.12);color:var(--primary2);}
 .diff-chip.easy.sel{border-color:var(--easy);background:rgba(16,185,129,0.1);color:var(--easy);}
 .diff-chip.hard.sel{border-color:var(--hard);background:rgba(239,68,68,0.1);color:var(--hard);}
 
-/* QUESTION UI */
 .question-card{ background:var(--surface); border:1px solid var(--border2);border-radius:16px;padding:28px;margin-bottom:16px; }
 .q-num-tag{ font-size:0.65rem;font-weight:700;color:var(--primary2);letter-spacing:2px;text-transform:uppercase; margin-bottom:12px; }
 .q-text{font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.65;margin-bottom:24px;}
@@ -151,12 +137,9 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .opt-btn.correct .opt-letter{background:var(--easy);color:#fff;}
 .opt-btn.wrong{border-color:var(--hard)!important;background:rgba(239,68,68,0.1)!important;}
 
-/* LOGIN SCREEN */
-/* CINEMATIC LOGIN SCREEN UPGRADE */
 .login-wrap { 
     display: flex; align-items: center; justify-content: center; 
     height: calc(100vh - 68px); padding: 20px; 
-    /* Adding an ultra-realistic 8K style tech background with deep color grading */
     background: linear-gradient(rgba(15, 15, 26, 0.6), rgba(15, 15, 26, 0.95)), 
                 url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop') center/cover;
     position: relative;
@@ -164,7 +147,6 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 
 .login-box { 
     max-width: 400px; width: 100%; text-align: center; 
-    /* Premium Glassmorphism & Bokeh feel */
     background: rgba(30, 30, 45, 0.45);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -178,47 +160,38 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     transform: translateY(-5px);
     border-color: rgba(124, 58, 237, 0.4);
 }
-/* DATA TABLES */
+
 .table-responsive { width: 100%; overflow-x: auto; }
 .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; min-width: 500px; }
 .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
 .data-table th { color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem; }
 
-/* FOOTER */
 .page-footer{ background:var(--bg2);border-top:1px solid var(--border); padding:20px 28px; display:flex; flex-direction: column; align-items:center; gap:12px; font-size:0.75rem; color:var(--text3); position:relative; z-index:1; text-align: center; }
 .footer-links { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
 .footer-links a { color: var(--text3); text-decoration: none; font-weight: 500; }
 
-/* =========================================
-   📱 RESPONSIVE DESIGN (TABLET & MOBILE) 
-   ========================================= */
-
-/* Disable Custom Cursor on Touch Devices */
 @media (pointer: coarse) {
     body { cursor: auto; }
     .cursor-dot, .cursor-outline { display: none !important; }
-    .s-item, .topic-card, .btn, .icon-btn, .opt-btn, .footer-links a { cursor: pointer; }
+    .s-item, .topic-card, .btn, .icon-btn, .opt-btn, .footer-links a, .menu-toggle { cursor: pointer; }
 }
 
-/* Tablet Layout */
 @media (max-width: 992px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .sidebar { width: 220px; }
 }
 
-/* Mobile Layout */
 @media (max-width: 768px) {
-    .menu-toggle { display: block; margin-right: 15px; } /* Show Hamburger */
-    .nav-badge, .nav-sep { display: none; } /* Hide extra nav elements */
+    .menu-toggle { display: block; margin-right: 15px; } 
+    .nav-badge, .nav-sep { display: none; } 
     
     .navbar { padding: 10px 15px; justify-content: space-between; }
     .nav-right { gap: 8px; }
-    .gamification-stats { display: none; } /* Hide XP on topbar to save space */
-    .avatar-info { display: none; } /* Hide Name text, show only avatar ring */
+    .gamification-stats { display: none; } 
+    .avatar-info { display: none; } 
     
     .app-wrap { flex-direction: column; }
     
-    /* Collapsible Sidebar for Mobile */
     .sidebar { 
         position: absolute; left: -100%; top: 0; 
         width: 250px; z-index: 100; height: 100%; 
@@ -230,27 +203,22 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     .stats-grid { grid-template-columns: 1fr; }
     .topic-grid { grid-template-columns: repeat(2, 1fr); }
     
-    /* Adjust Result Screen Stats */
     #resultsScreen .stats-grid { grid-template-columns: 1fr; gap: 10px; }
     
     #toast { right: 10px; left: 10px; bottom: 10px; text-align: center; }
 }
 
-/* ... (aapka purana lamba CSS code) ... */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary2); }
 
-    /* Premium Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary2); }
+.stat-card:hover, .topic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+    border-color: var(--primary2);
+}
 
-    /* 3D Hover Effect for Cards */
-    .stat-card:hover, .topic-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
-        border-color: var(--primary2);
-    }
-/* PREMIUM LEADERBOARD UPGRADES */
 .lb-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; min-width: 600px; }
 .lb-table th { color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; padding: 0 15px 10px; border: none; text-align: left; }
 .lb-table td { background: var(--surface); padding: 12px 15px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: 0.2s; }
@@ -258,10 +226,8 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .lb-table tr td:last-child { border-right: 1px solid var(--border); border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
 .lb-table tr:hover td { background: var(--surface2); transform: scale(1.01); }
 
-/* Current User Highlight */
 .lb-table tr.current-user td { background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.3); }
 
-/* Avatars & Gamification Elements */
 .lb-user { display: flex; align-items: center; gap: 12px; }
 .lb-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .lb-medal { font-size: 1.4rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
@@ -269,8 +235,6 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .trend-down { color: var(--hard); font-size: 0.75rem; font-weight: 600; }
 .tech-badge { background: var(--bg2); border: 1px solid var(--border2); padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; color: var(--text2); margin-right: 4px; display: inline-block; font-weight: 600; }
 </style>
-  <!-- Chart.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -309,7 +273,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     <div class="nav-avatar-wrap">
       <div class="avatar-ring">AK</div>
       <div class="avatar-info">
-        <div class="name">ABHINAV KUMAR</div>
+        <div class="name">ABHINAV YADAV</div>
         <div class="uid">UID: O23BCA110050</div>
       </div>
     </div>
@@ -338,7 +302,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     <div class="sidebar-project-box">
       <div class="box-header"><i class="fas fa-university"></i> &nbsp;Project Info</div>
       <div class="box-body">
-        <div class="box-row"><span class="box-key">Student</span><span class="box-val">ABHINAV KUMAR</span></div>
+        <div class="box-row"><span class="box-key">Student</span><span class="box-val">ABHINAV YADAV</span></div>
         <div class="box-row"><span class="box-key">UID</span><span class="box-val">O23BCA110050</span></div>
         <div class="box-row"><span class="box-key">Course</span><span class="box-val">BCA Major Project</span></div>
         <div class="box-row"><span class="box-key">Session</span><span class="box-val">2023–2026</span></div>
@@ -422,8 +386,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
       <div class="question-card">
         <div class="q-num-tag">Question <span id="qTagDisplay">1</span></div>
         <div class="q-text" id="qText">Loading AI Question...</div>
-        <div class="options-list" id="optsList">
-            </div>
+        <div class="options-list" id="optsList"></div>
       </div>
 
       <div style="display:flex; justify-content:space-between; margin-top: 10px;">
@@ -455,24 +418,21 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 
           <div style="display:flex; gap:10px; justify-content: center; flex-wrap: wrap;">
             <button class="btn btn-grad" onclick="navTo('homeScreen', 'nav-home')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-home"></i> Home</button>
-            <button class="btn btn-ghost" onclick="showToast('Downloading Report PDF...')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-file-pdf"></i> Export Report</button>
+            <button class="btn btn-ghost" onclick="exportDataToCSV()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-file-csv"></i> Export CSV</button>
             <button class="btn btn-ghost" onclick="showToast('Downloading Certificate with QR...')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-certificate"></i> Get Certificate</button>
           </div>
       </div>
     </div>
 
-   <!-- ANALYTICS SCREEN -->
     <div id="analyticsScreen" class="screen">
         <div class="card">
             <div class="sec-title"><i class="fas fa-chart-pie" style="color:var(--primary2)"></i> AI Performance Analysis</div>
             <p style="color:var(--text2); font-size:0.85rem; margin-bottom: 20px;">Weekly Progress & Accuracy Rate</p>
             
-            <!-- LIVE CHART CANVAS -->
             <div style="position: relative; height: 250px; width: 100%;">
                 <canvas id="performanceChart"></canvas>
             </div>
             
-            <!-- YEH TEXT YAHAN HONA CHAHIYE -->
             <p style="margin-top: 20px; font-size: 0.85rem; color: var(--hard);"><i class="fas fa-exclamation-circle"></i> AI Detected Weakness: <strong>Database Normalization</strong>. We recommend taking the AI Study Plan quiz.</p>
         </div>
     </div>
@@ -535,7 +495,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
                         <td>
                             <div class="lb-user">
                                 <div class="lb-avatar" style="background: var(--grad);">AK</div>
-                                <div><strong style="color:var(--text)">ABHINAV Kumar</strong><br><span style="font-size:0.65rem; color:var(--primary2); font-weight:600;">UID: O23BCA110050 (You)</span></div>
+                                <div><strong style="color:var(--text)">ABHINAV YADAV</strong><br><span style="font-size:0.65rem; color:var(--primary2); font-weight:600;">UID: O23BCA110050 (You)</span></div>
                             </div>
                         </td>
                         <td style="color: var(--primary2); font-weight: 800; font-size: 1.1rem;">2,450</td>
@@ -580,33 +540,32 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
             </div>
         </div>
     </div>
-<!-- ABOUT PROJECT SCREEN (ALAG PAGE) -->
-        <div id="aboutScreen" class="screen">
-            <div class="card" style="margin-top: 20px;">
-                <div class="sec-title"><i class="fas fa-info-circle" style="color:var(--primary2)"></i> About This Project</div>
-                
-                <p style="color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 15px;">
-                    The <strong>AI-Based Online Quiz Web Application with Adaptive Level</strong> is an advanced educational platform developed as a Major Project for the BCA program (2023–2026) at Chandigarh University. 
-                </p>
-                
-                <p style="color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
-                    Designed by <strong>Abhinav Kumar</strong>, this system replaces static assessments with an intelligent engine. It dynamically adjusts the difficulty level of questions based on real-time user performance, ensuring a highly personalized and gamified learning experience. The integration of live analytics helps track precise knowledge gaps instantly.
-                </p>
 
-                <!-- Feature Badges -->
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <span class="tech-badge" style="background: rgba(124,58,237,0.1); color: var(--primary2); border: 1px solid rgba(124,58,237,0.3); padding: 6px 12px; font-size: 0.75rem;">
-                        <i class="fas fa-brain"></i> Adaptive Learning
-                    </span>
-                    <span class="tech-badge" style="background: rgba(6,182,212,0.1); color: var(--easy); border: 1px solid rgba(6,182,212,0.3); padding: 6px 12px; font-size: 0.75rem;">
-                        <i class="fas fa-chart-line"></i> Real-Time Analytics
-                    </span>
-                    <span class="tech-badge" style="background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); padding: 6px 12px; font-size: 0.75rem;">
-                        <i class="fas fa-gamepad"></i> Gamified Dashboard
-                    </span>
-                </div>
+    <div id="aboutScreen" class="screen">
+        <div class="card" style="margin-top: 20px;">
+            <div class="sec-title"><i class="fas fa-info-circle" style="color:var(--primary2)"></i> About This Project</div>
+            
+            <p style="color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 15px;">
+                The <strong>AI-Based Online Quiz Application with Adaptive Difficulty Level</strong> is an advanced educational platform developed as a Major Project for the BCA program (2023–2026) at Chandigarh University. 
+            </p>
+            
+            <p style="color: var(--text2); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+                Designed by <strong>ABHINAV YADAV</strong>, this system replaces static assessments with an intelligent engine. It dynamically adjusts the difficulty level of questions based on real-time user performance, ensuring a highly personalized and gamified learning experience. The integration of live analytics helps track precise knowledge gaps instantly.
+            </p>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <span class="tech-badge" style="background: rgba(124,58,237,0.1); color: var(--primary2); border: 1px solid rgba(124,58,237,0.3); padding: 6px 12px; font-size: 0.75rem;">
+                    <i class="fas fa-brain"></i> Adaptive Learning
+                </span>
+                <span class="tech-badge" style="background: rgba(6,182,212,0.1); color: var(--easy); border: 1px solid rgba(6,182,212,0.3); padding: 6px 12px; font-size: 0.75rem;">
+                    <i class="fas fa-chart-line"></i> Real-Time Analytics
+                </span>
+                <span class="tech-badge" style="background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); padding: 6px 12px; font-size: 0.75rem;">
+                    <i class="fas fa-gamepad"></i> Gamified Dashboard
+                </span>
             </div>
         </div>
+    </div>
   </main>
 </div>
 
@@ -639,36 +598,28 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
       <a href="#" onmouseenter="cursorHover()" onmouseleave="cursorLeave()">FAQ</a>
   </div>
  <div style="text-align: center; margin: 15px 0;">
-    <!-- GitHub Link -->
     <a href="https://github.com/abhinav8879/Ai-Quiz-App" target="_blank" style="color: var(--text3); margin: 0 10px; font-size: 1.2rem; transition: 0.3s; text-decoration: none;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text3)'">
         <i class="fab fa-github"></i>
     </a>
-
-    <!-- LinkedIn Link -->
     <a href="https://www.linkedin.com/in/abhinav-kumar-ba9604299" target="_blank" style="color: var(--text3); margin: 0 10px; font-size: 1.2rem; transition: 0.3s; text-decoration: none;" onmouseover="this.style.color='#0a66c2'" onmouseout="this.style.color='var(--text3)'">
         <i class="fab fa-linkedin"></i>
     </a>
-
-    <!-- Twitter (X) Link -->
     <a href="https://x.com/Rajabhinav887" target="_blank" style="color: var(--text3); margin: 0 10px; font-size: 1.2rem; transition: 0.3s; text-decoration: none;" onmouseover="this.style.color='#1da1f2'" onmouseout="this.style.color='var(--text3)'">
         <i class="fab fa-twitter"></i>
     </a>
 </div>
   <div style="margin-top: 5px;">
-      <strong>Chandigarh University</strong> | BCA Major Project | <strong>ABHINAV KUMAR</strong> | UID: O23BCA110050
+      <strong>Chandigarh University</strong> | BCA Major Project | <strong>ABHINAV YADAV</strong> | UID: O23BCA110050
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-<script>
-// --- PWA SERVICE WORKER REGISTRATION ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => {});
     });
 }
 
-// --- CUSTOM CURSOR ---
 const dot = document.getElementById("cursorDot");
 const outline = document.getElementById("cursorOutline");
 window.addEventListener("mousemove", function(e) {
@@ -682,7 +633,6 @@ window.addEventListener("mousemove", function(e) {
 function cursorHover() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1.5)"; outline.style.backgroundColor = "rgba(124,58,237,0.1)"; } }
 function cursorLeave() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1)"; outline.style.backgroundColor = "transparent"; } }
 
-// --- TOAST NOTIFICATIONS ---
 function showToast(msg) {
     const t = document.getElementById('toast');
     if(!t) return;
@@ -691,22 +641,20 @@ function showToast(msg) {
     setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
 
-// --- THEME & FULLSCREEN ---
 function toggleTheme() {
     const html = document.documentElement;
     html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
+
 function toggleFullscreen() {
     if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
     else document.exitFullscreen();
 }
 
-// --- MOBILE SIDEBAR TOGGLE ---
 function toggleSidebar() {
     document.getElementById('mainSidebar').classList.toggle('mobile-open');
 }
 
-// --- NAVIGATION LOGIC ---
 function navTo(screenId, navId) {
     document.querySelectorAll('.app-wrap main .screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
@@ -720,19 +668,18 @@ function navTo(screenId, navId) {
     if(screenId === 'analyticsScreen') setTimeout(renderLiveChart, 100);
 }
 
-// --- AUTHENTICATION ---
 function login() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appMain').style.display = 'flex';
     showToast("Login Successful! JWT Token generated.");
 }
+
 function logout() {
     document.getElementById('appMain').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
     navTo('homeScreen', 'nav-home');
 }
 
-// --- TOPIC & DIFFICULTY SELECTION ---
 let selectedTopic = "General Knowledge";
 let selectedDiff = "adaptive";
 function pickTopic(el) {
@@ -747,7 +694,6 @@ function pickDiff(diff, el) {
     selectedDiff = diff;
 }
 
-// --- ADAPTIVE QUIZ ENGINE & TIMER ---
 let curQIndex = 0;
 let curScore = 0;
 let timerInterval;
@@ -889,14 +835,13 @@ function endQuiz() {
     navTo('resultsScreen', 'nav-quiz');
 }
 
-// --- EXPORT STUDENT DATA TO CSV ---
 function exportDataToCSV() {
     showToast('Preparing CSV Export...');
     const exportData = [
         ["Student Name", "UID", "Quiz Topic", "Score (XP)", "Accuracy", "Weakness"],
         ["Aarav Mishra", "O23BCA110012", "Java Core OOPS", "5200", "92%", "None"],
         ["Priya Singh", "O23BCA110088", "Data Structures", "4850", "88%", "Graphs"],
-        ["Abhinav Kumar", "O23BCA110050", "Cloud Computing", "2450", "87%", "Database Normalization"]
+        ["ABHINAV YADAV", "O23BCA110050", "Cloud Computing", "2450", "87%", "Database Normalization"]
     ];
     let csvContent = "data:text/csv;charset=utf-8,";
     exportData.forEach(function(rowArray) {
@@ -913,7 +858,6 @@ function exportDataToCSV() {
     setTimeout(() => { showToast('Export Successful!'); }, 1000);
 }
 
-// --- LIVE DATA ANALYTICS CHART ---
 let performanceChartInstance = null;
 function renderLiveChart() {
     const ctx = document.getElementById('performanceChart').getContext('2d');
@@ -952,6 +896,5 @@ function renderLiveChart() {
     });
 }
 </script>
-
 </body>
 </html>
