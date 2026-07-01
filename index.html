@@ -821,23 +821,33 @@ function loadQuestion() {
     typeWriter(); // Trigger typing effect
 }
 
+// --- HANDLE ANSWER WITH SOUND EFFECTS ---
 function handleAnswer(selected, correct, btn) {
     clearInterval(timerInterval);
     const buttons = document.querySelectorAll('.opt-btn');
     buttons.forEach(b => b.disabled = true);
     
+    // Online free sound effect links
+    const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
+    const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
+    
+    // Sound ka volume thoda set karna (0.5 means 50%)
+    successSound.volume = 0.5;
+    errorSound.volume = 0.4;
+    
     if(selected === correct) {
         btn.classList.add('correct');
         curScore++;
+        successSound.play(); // Sahi jawab par Success Ping bajega
     } else {
         btn.classList.add('wrong');
         buttons[correct].classList.add('correct');
+        errorSound.play(); // Galat jawab par Error Buzz bajega
     }
     
     document.getElementById('scoreDisplay').innerText = curScore;
     setTimeout(() => { curQIndex++; loadQuestion(); }, 1200);
 }
-
 function skipQuestion() {
     clearInterval(timerInterval);
     showToast("Question skipped. Negative marking applied (-1 XP)");
