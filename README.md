@@ -125,30 +125,22 @@ The application is designed using modern front-end technologies and demonstrates
 
 ---
 
-# 📂 Project Structure
+# 📂 Project Structure (Single Page Application)
 
-```text
 Ai-Quiz-App/
 │
 ├── assets/
 │   ├── css/
+│   │   └── style.css       # All UI & Glassmorphism styles
 │   ├── js/
-│   ├── images/
-│   ├── sounds/
-│   └── icons/
+│   │   └── script.js       # Core Application Logic, Quiz & jsPDF
+│   ├── images/             # Project Screenshots & Logos
+│   └── icons/              # Favicons
 │
-├── index.html
-├── login.html
-├── dashboard.html
-├── quiz.html
-├── teacher.html
-├── leaderboard.html
-├── result.html
-│
-├── README.md
-├── LICENSE
-└── .gitignore
-```
+├── index.html              # Main SPA File (Contains Login, Dashboard, Quiz, Leaderboard)
+├── README.md               # Project Documentation
+├── .gitignore              # Git Ignore Rules
+└── LICENSE                 # MIT License
 
 ---
 
