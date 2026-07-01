@@ -269,6 +269,8 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .trend-down { color: var(--hard); font-size: 0.75rem; font-weight: 600; }
 .tech-badge { background: var(--bg2); border: 1px solid var(--border2); padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; color: var(--text2); margin-right: 4px; display: inline-block; font-weight: 600; }
 </style>
+  <!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -554,7 +556,7 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
             <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
                 <button class="btn btn-grad" onclick="showToast('Create Quiz interface opened')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-plus"></i> Create</button>
                 <button class="btn btn-ghost" onclick="showToast('CSV Upload ready')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-file-csv"></i> Upload</button>
-                <button class="btn btn-ghost" onclick="showToast('Exporting Student Data...')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-download"></i> Export</button>
+                <button class="btn btn-ghost" onclick="exportDataToCSV()" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-download"></i> Export</button>
             </div>
             <div class="table-responsive">
                 <table class="data-table">
@@ -940,8 +942,38 @@ navTo = function(screenId, navId) {
         setTimeout(renderLiveChart, 100); // Thoda delay taaki screen visible ho jaye
     }
 };
+  // --- EXPORT STUDENT DATA TO CSV ---
+function exportDataToCSV() {
+    showToast('Preparing CSV Export...');
+    
+    // Yeh woh dummy data hai jo download hoga (Future mein API se aayega)
+    const exportData = [
+        ["Student Name", "UID", "Quiz Topic", "Score (XP)", "Accuracy", "Weakness"],
+        ["Aarav Mishra", "O23BCA110012", "Java Core OOPS", "5200", "92%", "None"],
+        ["Priya Singh", "O23BCA110088", "Data Structures", "4850", "88%", "Graphs"],
+        ["Abhinav Kumar", "O23BCA110050", "Cloud Computing", "2450", "87%", "Database Normalization"]
+    ];
+
+    // Array ko CSV string mein convert karna
+    let csvContent = "data:text/csv;charset=utf-8,";
+    exportData.forEach(function(rowArray) {
+        let row = rowArray.join(",");
+        csvContent += row + "\r\n";
+    });
+
+    // File download karwana
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Student_Performance_Report.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setTimeout(() => { showToast('Export Successful!'); }, 1000);
+}
+  
 </script>
-<!-- Chart.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 </html>
