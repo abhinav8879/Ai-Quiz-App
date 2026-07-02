@@ -512,3 +512,30 @@ function downloadCertificate() {
         showToast('Certificate Downloaded Successfully!');
     }, 1200);
 }
+
+// AI se questions mangwane wala naya function
+async function generateAIQuiz(topic, difficulty) {
+    try {
+        console.log("AI is generating questions...");
+        // User ko loading dikhane ke liye aap yahan loading spinner dikha sakte hain
+        
+        // Backend API ko call karna
+        const response = await fetch(`http://127.0.0.1:8000/generate-quiz?topic=${topic}&difficulty=${difficulty}`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+            // API se aaye JSON data ko array mein store karna
+            const aiQuestions = result.data;
+            console.log("AI Questions received:", aiQuestions);
+            
+            // YAHAN AAPKO APNE QUIZ START KARNE WALE FUNCTION KO CALL KARNA HAI
+            // Example: startQuiz(aiQuestions);
+            
+        } else {
+            alert("AI Quiz generate karne mein error aayi: " + result.message);
+        }
+    } catch (error) {
+        console.error("Backend Error:", error);
+        alert("Server se connect nahi ho paya. Kya aapka Python server chalu hai?");
+    }
+}
