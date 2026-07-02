@@ -145,7 +145,7 @@ function startApp() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appMain').style.display = 'flex';
     document.getElementById('navProfile').style.display = 'flex';
-    document.getElementById('userAvatarWrap').style.display = 'flex';
+    document.querySelector('.nav-avatar-wrap').style.display = 'flex';
     showToast("Welcome to QuizAI!");
 }
 
@@ -176,7 +176,7 @@ function logout() {
     document.getElementById('appMain').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('navProfile').style.display = 'none';
-    document.getElementById('userAvatarWrap').style.display = 'none';
+    document.querySelector('.nav-avatar-wrap').style.display = 'none';
     navTo('homeScreen', 'nav-home');
 }
 
@@ -463,3 +463,6 @@ function downloadCertificate() {
         showToast('Certificate Downloaded Successfully!');
     }, 1200);
 }
+
+// Login page par load hote hi avatar hide kar dega
+document.querySelector('.nav-avatar-wrap').style.display = 'none';
