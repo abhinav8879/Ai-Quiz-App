@@ -144,7 +144,8 @@ function updateDashboardData(name, uid) {
 function startApp() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appMain').style.display = 'flex';
-    document.getElementById('navProfile').style.display = 'flex'; // <-- YEH NAYI LINE ADD KI HAI
+    document.getElementById('navProfile').style.display = 'flex';
+    document.getElementById('userAvatarWrap').style.display = 'flex';
     showToast("Welcome to QuizAI!");
 }
 
@@ -174,7 +175,8 @@ function handleForgotPassword() {
 function logout() {
     document.getElementById('appMain').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('navProfile').style.display = 'none'; // <-- YEH NAYI LINE ADD KI HAI
+    document.getElementById('navProfile').style.display = 'none';
+    document.getElementById('userAvatarWrap').style.display = 'none';
     navTo('homeScreen', 'nav-home');
 }
 
