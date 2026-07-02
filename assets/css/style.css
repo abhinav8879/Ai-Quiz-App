@@ -275,16 +275,3 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
         display: none !important; /* Naam aur UID hata diya */
     }
 }
-
-.nav-right {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin-left: auto !important; /* Yeh avatar ko push karke right side clear karega */
-}
-
-.nav-avatar-wrap {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
