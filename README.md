@@ -137,6 +137,9 @@ Ai-Quiz-App/
 │       └── script.js
 │   └── images/
 │
+├── docs/
+│   ├── BCA_Project_Report.pdf
+│   ├── BCA_Project_Report.ppt
 ├── index.html
 ├── main.py
 ├── requirements.txt
