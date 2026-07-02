@@ -45,8 +45,8 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .nav-badge{ background:linear-gradient(135deg,rgba(79,70,229,0.25),rgba(124,58,237,0.25)); border:1px solid rgba(124,58,237,0.4); color:var(--primary2);font-size:0.65rem;font-weight:600; padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase; }
 
 /* GAMIFICATION & NAV RIGHT */
-.nav-right{display:flex;align-items:center;gap:12px;}
-.game-stats { display: flex; gap: 8px; font-size: 0.75rem; font-weight: 700; }
+.nav-right{display:felx;align-items:center;gap:12px;}
+.game-stats { display: none !important; }
 .game-pill { background: var(--surface); border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
 .game-pill.xp { color: var(--medium); } .game-pill.coins { color: var(--easy); }
 .icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: 0.2s; }
@@ -274,4 +274,17 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
     .nav-avatar-wrap .avatar-info {
         display: none !important; /* Naam aur UID hata diya */
     }
+}
+
+.nav-right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-left: auto !important; /* Yeh avatar ko push karke right side clear karega */
+}
+
+.nav-avatar-wrap {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
