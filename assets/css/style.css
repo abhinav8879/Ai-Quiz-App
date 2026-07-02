@@ -51,9 +51,26 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .game-pill.xp { color: var(--medium); } .game-pill.coins { color: var(--easy); }
 .icon-btn { background: transparent; border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: none; transition: 0.2s; }
 .icon-btn:hover { background: var(--surface2); }
-.nav-avatar-wrap{display:flex;align-items:center;gap:10px;}
-.avatar-ring{ width:38px;height:38px;border-radius:50%; background:var(--grad); display:flex;align-items:center;justify-content:center; color:#fff;font-weight:700;font-size:0.85rem; box-shadow:0 0 12px var(--glow); }
-.avatar-info .name{font-size:0.82rem;font-weight:600;color:var(--text);}
+.nav-avatar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer; /* Taaki click karne par professional feel aaye */
+}
+
+/* Yeh avatar ring ko center karega */
+.avatar-ring {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0; /* Taaki ring choti na ho */
+}
 .avatar-info .uid{font-size:0.68rem;color:var(--text3);}
 
 /* SIDEBAR */
@@ -244,19 +261,17 @@ a:hover ~ .cursor-outline, button:hover ~ .cursor-outline { width: 45px; height:
 .trend-down { color: var(--hard); font-size: 0.75rem; font-weight: 600; }
 .tech-badge { background: var(--bg2); border: 1px solid var(--border2); padding: 4px 8px; border-radius: 6px; font-size: 0.65rem; color: var(--text2); margin-right: 4px; display: inline-block; font-weight: 600; }
 
-/* Mobile Optimization for Navbar */
+/* Mobile Optimization - Avatar Centering */
 @media screen and (max-width: 600px) {
-    .nav-left .cu-logo-wrap img {
-        height: 35px !important; /* Logo size thoda set kiya */
+    .nav-avatar-wrap {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important; /* Yeh ring ko center karega */
+        width: 40px !important;            /* Wrapper ki width fix kari */
+        margin-right: 5px !important;
     }
     
-    .nav-right {
-        gap: 8px !important; /* Avatar aur icons ke beech perfect gap */
-    }
-    
-    /* Stats cards ko mobile par thoda aur accha look dene ke liye */
-    .stat-card {
-        padding: 15px !important;
+    .nav-avatar-wrap .avatar-info {
+        display: none !important; /* Naam aur UID hata diya */
     }
 }
-
