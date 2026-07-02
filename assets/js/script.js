@@ -1,11 +1,13 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => {});
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW Registration failed:", err));
     });
 }
 
+// --- CUSTOM CURSOR ---
 const dot = document.getElementById("cursorDot");
 const outline = document.getElementById("cursorOutline");
+
 window.addEventListener("mousemove", function(e) {
     if(dot && outline) {
         dot.style.left = e.clientX + "px";
@@ -14,9 +16,22 @@ window.addEventListener("mousemove", function(e) {
         outline.style.top = e.clientY + "px";
     }
 });
-function cursorHover() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1.5)"; outline.style.backgroundColor = "rgba(124,58,237,0.1)"; } }
-function cursorLeave() { if(outline){ outline.style.transform = "translate(-50%, -50%) scale(1)"; outline.style.backgroundColor = "transparent"; } }
 
+function cursorHover() { 
+    if(outline) { 
+        outline.style.transform = "translate(-50%, -50%) scale(1.5)"; 
+        outline.style.backgroundColor = "rgba(124,58,237,0.1)"; 
+    } 
+}
+
+function cursorLeave() { 
+    if(outline) { 
+        outline.style.transform = "translate(-50%, -50%) scale(1)"; 
+        outline.style.backgroundColor = "transparent"; 
+    } 
+}
+
+// --- UTILITY FUNCTIONS ---
 function showToast(msg) {
     const t = document.getElementById('toast');
     if(!t) return;
@@ -31,36 +46,48 @@ function toggleTheme() {
 }
 
 function toggleFullscreen() {
-    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
-    else document.exitFullscreen();
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(()=>{});
+    } else {
+        document.exitFullscreen();
+    }
 }
 
 function toggleSidebar() {
-    document.getElementById('mainSidebar').classList.toggle('mobile-open');
+    const sidebar = document.getElementById('mainSidebar');
+    if(sidebar) sidebar.classList.toggle('mobile-open');
 }
 
 function navTo(screenId, navId) {
     document.querySelectorAll('.app-wrap main .screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
+    
+    const targetScreen = document.getElementById(screenId);
+    if(targetScreen) targetScreen.classList.add('active');
     
     document.querySelectorAll('.s-item').forEach(i => i.classList.remove('active'));
-    if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
     
-    document.getElementById('mainSidebar').classList.remove('mobile-open');
+    const targetNav = document.getElementById(navId);
+    if(targetNav) targetNav.classList.add('active');
+    
+    const sidebar = document.getElementById('mainSidebar');
+    if(sidebar) sidebar.classList.remove('mobile-open');
+    
     clearInterval(timerInterval);
     
     if(screenId === 'analyticsScreen') setTimeout(renderLiveChart, 100);
 }
 
 // --- AUTHENTICATION & PROFILE SYSTEM ---
-
 function toggleAuth(mode) {
+    const loginForm = document.getElementById('loginFormBlock');
+    const regForm = document.getElementById('registerFormBlock');
+    
     if(mode === 'register') {
-        document.getElementById('loginFormBlock').style.display = 'none';
-        document.getElementById('registerFormBlock').style.display = 'block';
+        if(loginForm) loginForm.style.display = 'none';
+        if(regForm) regForm.style.display = 'block';
     } else {
-        document.getElementById('registerFormBlock').style.display = 'none';
-        document.getElementById('loginFormBlock').style.display = 'block';
+        if(regForm) regForm.style.display = 'none';
+        if(loginForm) loginForm.style.display = 'block';
     }
 }
 
@@ -75,20 +102,17 @@ function handleRegister() {
         return;
     }
 
-    // Save to Browser's LocalStorage (Fake Backend)
     const userObj = { name: name, uid: uid, email: email, pass: pass };
     localStorage.setItem('QuizUser_' + uid, JSON.stringify(userObj));
     
     showToast("Profile Created Successfully! Please Login.");
     
-    // Clear fields & Switch to Login
     document.getElementById('regName').value = '';
     document.getElementById('regUid').value = '';
     document.getElementById('regEmail').value = '';
     document.getElementById('regPass').value = '';
-    toggleAuth('login');
     
-    // Pre-fill UID in login screen for convenience
+    toggleAuth('login');
     document.getElementById('loginUid').value = uid;
 }
 
@@ -101,14 +125,13 @@ function handleLogin() {
         return;
     }
 
-    // Default Admin Access (Taki aapka purana login hamesha chale)
+    // Default Admin Access
     if(uid === "O23BCA110050" && pass === "password123") {
         updateDashboardData("ABHINAV KUMAR", uid);
         startApp();
         return;
     }
 
-    // Check LocalStorage for registered users
     const savedUser = localStorage.getItem('QuizUser_' + uid);
     if(savedUser) {
         const userData = JSON.parse(savedUser);
@@ -123,29 +146,39 @@ function handleLogin() {
     }
 }
 
-// Update UI with the logged-in user's details
 function updateDashboardData(name, uid) {
+    // Safely update Navbar Elements (Will not throw error if hidden/removed in HTML)
+    const nameEl = document.querySelector('.avatar-info .name');
+    const uidEl = document.querySelector('.avatar-info .uid');
+    const ringEl = document.querySelector('.avatar-ring');
     
-    // 2. Generate Avatar Initials (e.g. Abhinav Kumar -> AK)
-    let initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-    document.querySelector('.avatar-ring').innerText = initials;
+    if(nameEl) nameEl.innerText = name.toUpperCase();
+    if(uidEl) uidEl.innerText = "UID: " + uid;
+    
+    if(ringEl) {
+        let initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        ringEl.innerText = initials;
+    }
 
-    // 3. Update Sidebar Project Info
+    // Update Sidebar Project Info
     const projectBoxVals = document.querySelectorAll('.sidebar-project-box .box-val');
     if(projectBoxVals.length > 1) {
         projectBoxVals[0].innerText = name.toUpperCase();
         projectBoxVals[1].innerText = uid;
     }
     
-    // 4. Save name globally so Certificate can use it
     window.currentLoggedUser = name.toUpperCase();
 }
 
 function startApp() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('appMain').style.display = 'flex';
-    document.getElementById('navProfile').style.display = 'flex';
-    document.querySelector('.nav-avatar-wrap').style.display = 'flex';
+    const loginScreen = document.getElementById('loginScreen');
+    const appMain = document.getElementById('appMain');
+    const navProfile = document.getElementById('navProfile');
+    
+    if(loginScreen) loginScreen.style.display = 'none';
+    if(appMain) appMain.style.display = 'flex';
+    if(navProfile) navProfile.style.display = 'flex';
+    
     showToast("Welcome to QuizAI!");
 }
 
@@ -157,13 +190,11 @@ function handleForgotPassword() {
         return;
     }
 
-    // Default master account check
     if(uid === "O23BCA110050") {
         showToast("Master Password reset link sent to registered email!");
         return;
     }
 
-    // LocalStorage check for registered users
     const savedUser = localStorage.getItem('QuizUser_' + uid);
     if(savedUser) {
         showToast("Password reset link sent to your registered email!");
@@ -173,27 +204,20 @@ function handleForgotPassword() {
 }
 
 function logout() {
-    document.getElementById('appMain').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('navProfile').style.display = 'none';
-    document.querySelector('.nav-avatar-wrap').style.display = 'none';
+    const loginScreen = document.getElementById('loginScreen');
+    const appMain = document.getElementById('appMain');
+    const navProfile = document.getElementById('navProfile');
+    
+    if(appMain) appMain.style.display = 'none';
+    if(loginScreen) loginScreen.style.display = 'flex';
+    if(navProfile) navProfile.style.display = 'none';
+    
     navTo('homeScreen', 'nav-home');
 }
 
+// --- QUIZ LOGIC ---
 let selectedTopic = "General Knowledge";
 let selectedDiff = "adaptive";
-function pickTopic(el) {
-    document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedTopic = el.dataset.topic;
-    document.getElementById('customTopic').value = '';
-}
-function pickDiff(diff, el) {
-    document.querySelectorAll('.diff-chip').forEach(b => b.classList.remove('sel'));
-    el.classList.add('sel');
-    selectedDiff = diff;
-}
-
 let curQIndex = 0;
 let curScore = 0;
 let timerInterval;
@@ -216,11 +240,27 @@ const adaptiveQs = {
     ]
 };
 
+function pickTopic(el) {
+    document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTopic = el.dataset.topic;
+    document.getElementById('customTopic').value = '';
+}
+
+function pickDiff(diff, el) {
+    document.querySelectorAll('.diff-chip').forEach(b => b.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedDiff = diff;
+}
+
 function startQuiz() {
     const inputTopic = document.getElementById('customTopic').value.trim();
     if(inputTopic) selectedTopic = inputTopic;
     
-    curQIndex = 0; curScore = 0; currentLevel = 'medium'; 
+    curQIndex = 0; 
+    curScore = 0; 
+    currentLevel = 'medium'; 
+    
     document.getElementById('topicCrumb').innerText = selectedTopic;
     navTo('quizScreen', 'nav-quiz');
     loadQuestion();
@@ -276,19 +316,20 @@ function handleAnswer(selected, correct, btn) {
     
     const successSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3');
     const errorSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3');
-    successSound.volume = 0.5; errorSound.volume = 0.4;
+    successSound.volume = 0.5; 
+    errorSound.volume = 0.4;
     
     if(selected === correct) {
         btn.classList.add('correct');
         curScore++;
-        successSound.play().catch(e=>console.log(e));
+        successSound.play().catch(e => console.log("Audio play blocked"));
         if(currentLevel === 'easy') currentLevel = 'medium';
         else if(currentLevel === 'medium') currentLevel = 'hard';
         showToast("Correct! Difficulty Increased 📈");
     } else {
         btn.classList.add('wrong');
         buttons[correct].classList.add('correct');
-        errorSound.play().catch(e=>console.log(e));
+        errorSound.play().catch(e => console.log("Audio play blocked"));
         if(currentLevel === 'hard') currentLevel = 'medium';
         else if(currentLevel === 'medium') currentLevel = 'easy';
         showToast("Incorrect! Difficulty Decreased 📉");
@@ -325,8 +366,11 @@ function updateTimerUI() {
     let m = Math.floor(timeLeft / 60);
     let s = timeLeft % 60;
     document.getElementById('timeText').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-    if(timeLeft > 20) timerBox.className = 'timer-widget safe';
-    else timerBox.className = 'timer-widget'; 
+    
+    if(timerBox) {
+        if(timeLeft > 20) timerBox.className = 'timer-widget safe';
+        else timerBox.className = 'timer-widget'; 
+    }
 }
 
 function endQuiz() {
@@ -335,6 +379,7 @@ function endQuiz() {
     navTo('resultsScreen', 'nav-quiz');
 }
 
+// --- EXPORT & CHART & CERTIFICATE ---
 function exportDataToCSV() {
     showToast('Preparing CSV Export...');
     const exportData = [
@@ -360,11 +405,16 @@ function exportDataToCSV() {
 
 let performanceChartInstance = null;
 function renderLiveChart() {
-    const ctx = document.getElementById('performanceChart').getContext('2d');
+    const canvas = document.getElementById('performanceChart');
+    if(!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     if (performanceChartInstance) { performanceChartInstance.destroy(); }
+    
     const gradient = ctx.createLinearGradient(0, 0, 0, 250);
     gradient.addColorStop(0, 'rgba(124, 58, 237, 0.5)'); 
     gradient.addColorStop(1, 'rgba(124, 58, 237, 0.0)');
+    
     performanceChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -396,7 +446,6 @@ function renderLiveChart() {
     });
 }
 
-// --- GENERATE REAL PDF CERTIFICATE ---
 function downloadCertificate() {
     showToast('Generating Real PDF Certificate...');
     
@@ -463,6 +512,3 @@ function downloadCertificate() {
         showToast('Certificate Downloaded Successfully!');
     }, 1200);
 }
-
-// Login page par load hote hi avatar hide kar dega
-document.querySelector('.nav-avatar-wrap').style.display = 'none';
