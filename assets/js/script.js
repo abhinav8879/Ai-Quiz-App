@@ -147,7 +147,6 @@ function handleLogin() {
 }
 
 function updateDashboardData(name, uid) {
-    // Safely update Navbar Elements (Will not throw error if hidden/removed in HTML)
     const nameEl = document.querySelector('.avatar-info .name');
     const uidEl = document.querySelector('.avatar-info .uid');
     const ringEl = document.querySelector('.avatar-ring');
@@ -160,7 +159,6 @@ function updateDashboardData(name, uid) {
         ringEl.innerText = initials;
     }
 
-    // Update Sidebar Project Info
     const projectBoxVals = document.querySelectorAll('.sidebar-project-box .box-val');
     if(projectBoxVals.length > 1) {
         projectBoxVals[0].innerText = name.toUpperCase();
@@ -222,23 +220,8 @@ let curQIndex = 0;
 let curScore = 0;
 let timerInterval;
 let timeLeft = 60;
-const totalQs = 5;
 let currentLevel = 'medium'; 
-
-const adaptiveQs = {
-    easy: [
-        { q: "Which language is used for styling web pages?", opts: ["HTML", "JQuery", "CSS", "XML"], ans: 2 },
-        { q: "What is the brain of a computer?", opts: ["RAM", "CPU", "Hard Disk", "Monitor"], ans: 1 }
-    ],
-    medium: [
-        { q: "What does 'PWA' stand for?", opts: ["Progressive Web App", "Private Web Access", "Public Wide Area", "Primary Web Architecture"], ans: 0 },
-        { q: "In MySQL, which command is used to fetch data?", opts: ["UPDATE", "INSERT", "DELETE", "SELECT"], ans: 3 }
-    ],
-    hard: [
-        { q: "Which HTTP status code signifies 'Not Found'?", opts: ["200", "404", "500", "403"], ans: 1 },
-        { q: "What does JWT stand for in backend security?", opts: ["Java Web Token", "JSON Web Token", "JavaScript Window Time", "None"], ans: 1 }
-    ]
-};
+let currentAIQuestions = []; // AI data store karne ke liye
 
 function pickTopic(el) {
     document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('selected'));
@@ -253,13 +236,44 @@ function pickDiff(diff, el) {
     selectedDiff = diff;
 }
 
+// Backend se AI questions fetch karne ka function
+async function generateAIQuiz(topic, difficulty) {
+    try {
+        console.log("AI is generating questions...");
+        showToast("Generating AI Quiz... Please wait."); 
+        
+        // Agar user ne 'adaptive' select kiya hai toh AI ko default 'medium' bhejenge
+        const apiDiff = difficulty === 'adaptive' ? 'medium' : difficulty;
+        
+        const response = await fetch(`http://127.0.0.1:8000/generate-quiz?topic=${topic}&difficulty=${apiDiff}`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+            currentAIQuestions = result.data; 
+            console.log("AI Questions received:", currentAIQuestions);
+            startQuiz(); // Fetch hone ke baad quiz shuru karein
+        } else {
+            showToast("AI Quiz generate karne mein error aayi: " + result.message);
+        }
+    } catch (error) {
+        console.error("Backend Error:", error);
+        showToast("Server se connect nahi ho paya. Kya Python server chalu hai?");
+    }
+}
+
 function startQuiz() {
     const inputTopic = document.getElementById('customTopic').value.trim();
     if(inputTopic) selectedTopic = inputTopic;
     
+    // Agar AI ke paas abhi questions nahi hain, toh fetch karo aur ruko
+    if (currentAIQuestions.length === 0) {
+        generateAIQuiz(selectedTopic, selectedDiff);
+        return; 
+    }
+
+    // Ek baar data aa gaya toh UI update karke pehla question load karo
     curQIndex = 0; 
     curScore = 0; 
-    currentLevel = 'medium'; 
     
     document.getElementById('topicCrumb').innerText = selectedTopic;
     navTo('quizScreen', 'nav-quiz');
@@ -267,14 +281,14 @@ function startQuiz() {
 }
 
 function loadQuestion() {
-    if(curQIndex >= totalQs) { endQuiz(); return; }
+    // Check if we reached the end of AI questions
+    if(curQIndex >= currentAIQuestions.length) { endQuiz(); return; }
     
     document.getElementById('qIndexDisplay').innerText = curQIndex + 1;
-    document.getElementById('qTagDisplay').innerText = (curQIndex + 1) + " (" + currentLevel.toUpperCase() + " LEVEL)";
+    document.getElementById('qTagDisplay').innerText = (curQIndex + 1) + " (AI GENERATED)";
     document.getElementById('scoreDisplay').innerText = curScore;
     
-    const qList = adaptiveQs[currentLevel];
-    const qData = qList[curQIndex % qList.length]; 
+    const qData = currentAIQuestions[curQIndex]; 
     
     const qTextEl = document.getElementById('qText');
     const optsBox = document.getElementById('optsList');
@@ -323,16 +337,12 @@ function handleAnswer(selected, correct, btn) {
         btn.classList.add('correct');
         curScore++;
         successSound.play().catch(e => console.log("Audio play blocked"));
-        if(currentLevel === 'easy') currentLevel = 'medium';
-        else if(currentLevel === 'medium') currentLevel = 'hard';
-        showToast("Correct! Difficulty Increased 📈");
+        showToast("Correct Answer! +1 XP");
     } else {
         btn.classList.add('wrong');
         buttons[correct].classList.add('correct');
         errorSound.play().catch(e => console.log("Audio play blocked"));
-        if(currentLevel === 'hard') currentLevel = 'medium';
-        else if(currentLevel === 'medium') currentLevel = 'easy';
-        showToast("Incorrect! Difficulty Decreased 📉");
+        showToast("Incorrect Answer!");
     }
     
     document.getElementById('scoreDisplay').innerText = curScore;
@@ -341,7 +351,7 @@ function handleAnswer(selected, correct, btn) {
 
 function skipQuestion() {
     clearInterval(timerInterval);
-    showToast("Question skipped. (-1 XP)");
+    showToast("Question skipped. (0 XP)");
     curQIndex++;
     loadQuestion();
 }
@@ -376,6 +386,7 @@ function updateTimerUI() {
 function endQuiz() {
     clearInterval(timerInterval);
     document.getElementById('rsScore').innerText = curScore;
+    currentAIQuestions = []; // Reset karo taaki agla quiz naya aaye
     navTo('resultsScreen', 'nav-quiz');
 }
 
@@ -511,31 +522,4 @@ function downloadCertificate() {
         doc.save(`QuizAI_Certificate_${topic.replace(/\s+/g, '_')}.pdf`);
         showToast('Certificate Downloaded Successfully!');
     }, 1200);
-}
-
-// AI se questions mangwane wala naya function
-async function generateAIQuiz(topic, difficulty) {
-    try {
-        console.log("AI is generating questions...");
-        // User ko loading dikhane ke liye aap yahan loading spinner dikha sakte hain
-        
-        // Backend API ko call karna
-        const response = await fetch(`http://127.0.0.1:8000/generate-quiz?topic=${topic}&difficulty=${difficulty}`);
-        const result = await response.json();
-
-        if (result.status === "success") {
-            // API se aaye JSON data ko array mein store karna
-            const aiQuestions = result.data;
-            console.log("AI Questions received:", aiQuestions);
-            
-            // YAHAN AAPKO APNE QUIZ START KARNE WALE FUNCTION KO CALL KARNA HAI
-            // Example: startQuiz(aiQuestions);
-            
-        } else {
-            alert("AI Quiz generate karne mein error aayi: " + result.message);
-        }
-    } catch (error) {
-        console.error("Backend Error:", error);
-        alert("Server se connect nahi ho paya. Kya aapka Python server chalu hai?");
-    }
 }
