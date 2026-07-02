@@ -132,11 +132,14 @@ Ai-Quiz-App/
 │
 ├── assets/
 │   ├── css/
+│       └── style.css
 │   ├── js/
+│       └── script.js
 │   └── images/
 │
 ├── index.html
-│
+├── main.py
+├── requirements.txt
 ├── README.md
 ├── LICENSE
 └── .gitignore
