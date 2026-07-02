@@ -245,7 +245,7 @@ async function generateAIQuiz(topic, difficulty) {
         // Agar user ne 'adaptive' select kiya hai toh AI ko default 'medium' bhejenge
         const apiDiff = difficulty === 'adaptive' ? 'medium' : difficulty;
         
-        const response = await fetch(`http://127.0.0.1:8000/generate-quiz?topic=${topic}&difficulty=${apiDiff}`);
+        const response = await fetch(`https://ai-quiz-app-nd9n.onrender.com/generate-quiz?topic=${topic}&difficulty=${apiDiff}`);
         const result = await response.json();
 
         if (result.status === "success") {
