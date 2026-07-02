@@ -125,9 +125,6 @@ function handleLogin() {
 
 // Update UI with the logged-in user's details
 function updateDashboardData(name, uid) {
-    // 1. Update Navbar Name & UID
-    document.querySelector('.avatar-info .name').innerText = name.toUpperCase();
-    document.querySelector('.avatar-info .uid').innerText = "UID: " + uid;
     
     // 2. Generate Avatar Initials (e.g. Abhinav Kumar -> AK)
     let initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
