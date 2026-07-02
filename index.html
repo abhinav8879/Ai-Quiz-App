@@ -13,12 +13,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-<!-- EXTERNAL CSS LINK -->
 <link rel="stylesheet" href="assets/css/style.css?v=2">
 
-<!-- Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- jsPDF Library for Certificate Generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
@@ -48,8 +45,12 @@
     <button class="icon-btn" onclick="toggleFullscreen(); showToast('Fullscreen toggled')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-expand"></i></button>
     <button class="icon-btn" onclick="showToast('You have 2 new notifications!')" onmouseenter="cursorHover()" onmouseleave="cursorLeave()"><i class="fas fa-bell"></i></button>
 
-    <div class="nav-avatar-wrap" id="userAvatarWrap" style="display: none;">
+    <div class="nav-avatar-wrap" style="display: none !important;">
       <div class="avatar-ring">AK</div>
+      <div class="avatar-info">
+        <div class="name">ABHINAV KUMAR</div>
+        <div class="uid">UID: O23BCA110050</div>
+      </div>
     </div>
   </div>
 </nav>
@@ -345,7 +346,6 @@
       <div class="brain-icon" style="margin: 0 auto 15px; width: 60px; height: 60px; font-size: 1.8rem;"><i class="fas fa-brain"></i></div>
       <h2 style="font-family: 'Space Grotesk'; margin-bottom: 5px;">QuizAI Platform</h2>
       
-      <!-- 1. LOGIN FORM -->
       <div id="loginFormBlock">
           <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.85rem;">Student Authentication</p>
           
@@ -364,7 +364,6 @@
           </p>
       </div>
 
-      <!-- 2. REGISTER FORM (Hidden by default) -->
       <div id="registerFormBlock" style="display: none;">
           <p style="color: var(--text2); margin-bottom: 20px; font-size: 0.85rem;">Create New Profile</p>
           
@@ -406,7 +405,6 @@
   </div>
 </footer>
 
-<!-- EXTERNAL JAVASCRIPT LINK -->
 <script src="assets/js/script.js"></script>
 
 </body>
